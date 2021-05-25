@@ -54,7 +54,6 @@ class NIFastCounter(Base, SlowCounterInterface, FastCounterInterface):
     sigStart = QtCore.Signal()
 
     def __init__(self, config, **kwargs):
-        print('__init__')
         self.useNIcard = 0 # analog input, APD
         self.useNIcardDI = 1  # photon counter, SPC
         super().__init__(config=config, **kwargs)
@@ -70,7 +69,6 @@ class NIFastCounter(Base, SlowCounterInterface, FastCounterInterface):
         self.threadlock = Mutex()
 
     def on_activate(self):
-        print('on_activate')
 
         """ Activate and establish the connection to NI card and initialize.
         """
@@ -82,7 +80,6 @@ class NIFastCounter(Base, SlowCounterInterface, FastCounterInterface):
         time.sleep(0.2)
 
     def on_deactivate(self):
-        print('on_deactivate')
 
         """ Deactivates and disconnects the device.
         """
@@ -92,7 +89,6 @@ class NIFastCounter(Base, SlowCounterInterface, FastCounterInterface):
 
 
     def start(self, acq_time):
-        print('start')
 
         """ Start acquisition for 'acq_time' ms.
         """
@@ -233,7 +229,6 @@ class NIFastCounter(Base, SlowCounterInterface, FastCounterInterface):
     # =========================================================================
 
     def set_up_clock(self, clock_frequency=None, clock_channel=None):
-        print('set_up_clock')
         """Ensure Interface compatibility.
         """
 
@@ -257,7 +252,6 @@ class NIFastCounter(Base, SlowCounterInterface, FastCounterInterface):
         return 0
 
     def get_counter_channels(self):
-        print('get_counter_channels')
         """ Return one counter channel. """
         return ['Ctr0']
 
@@ -270,8 +264,6 @@ class NIFastCounter(Base, SlowCounterInterface, FastCounterInterface):
         FIXME: ask hardware for limits when module is loaded
         """
         constraints = dict()
-        print('get constraints1')
-        print('get constraints2')
         # the unit of those entries are seconds per bin. In order to get the
         # current binwidth in seonds use the get_binwidth method.
         constraints['hardware_binwidth_list'] = [1e-9, 10e-9, 50e-9, 100e-9, 0.5e-6, 1e-6, 1.5e-6, 2e-6]
@@ -290,7 +282,6 @@ class NIFastCounter(Base, SlowCounterInterface, FastCounterInterface):
         @return float: the photon counts per second
         """
         time.sleep(0.05)
-        #return [self.get_count_rate(self._count_channel)]
         return 0
 
     def close_counter(self):
@@ -317,7 +308,6 @@ class NIFastCounter(Base, SlowCounterInterface, FastCounterInterface):
     # FIXME: The interface connection to the fast counter must be established!
 
     def configure(self, bin_width_ns, record_length_ns, number_of_gates=0):
-        print('configure')
         self.startSweep = 0
         self.mycounter = 1
         self.numberofsweeps = 1
@@ -336,7 +326,6 @@ class NIFastCounter(Base, SlowCounterInterface, FastCounterInterface):
             self.outputfile = open("HosTest.out", "wb+")
             
         '''
-        #print(self.get_binwidth())
         self.testStatue = 0
         self._bin_width_ns = bin_width_ns * 1e9  # the input is in second I believe and not nanosecond
         self._record_length_ns = record_length_ns * 1e9  #
@@ -348,7 +337,6 @@ class NIFastCounter(Base, SlowCounterInterface, FastCounterInterface):
 
         self._number_of_gates = number_of_gates
         self.startflag = 0
-        # FIXME: actualle only an unsigned array will be needed. Change that later. WE fixed it!Not sure though!
 
         self.count = int(number_of_gates)
         print('Picoharp/binwidth=')
@@ -361,7 +349,7 @@ class NIFastCounter(Base, SlowCounterInterface, FastCounterInterface):
         self.firsttimeNI = 1
         self.result = []
 
-        ####################### NI Card
+        ########## NI Card
         Resolution = self._bin_width_ns * 1e-9  # it should be in seconds
         Tm = self._record_length_ns * 1e-9  # it should be in seconds
         self.ACQtime = self._record_length_ns * 1e-9  # 10 second is ok, ACQ time in seconds
@@ -376,7 +364,6 @@ class NIFastCounter(Base, SlowCounterInterface, FastCounterInterface):
         self.VoltageMin = 0
         self.VoltageMax = 5
 
-        print('configuration is complete!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
         return bin_width_ns, record_length_ns, number_of_gates
 
     def get_status(self):
@@ -395,7 +382,6 @@ class NIFastCounter(Base, SlowCounterInterface, FastCounterInterface):
             return -1
 
     def pause_measure(self):
-        print('pause_measure')
 
         """
         Pauses the current measurement if the fast counter is in running state.
@@ -403,12 +389,10 @@ class NIFastCounter(Base, SlowCounterInterface, FastCounterInterface):
         try:
             self.stop_measure()
             self.meas_run = False
-            print('pause measure l275')
         except:
             print('measurement not pauses')
 
     def continue_measure(self):
-        print('continue_measure')
 
         """
         Continues the current measurement if the fast counter is in pause state.
@@ -426,7 +410,6 @@ class NIFastCounter(Base, SlowCounterInterface, FastCounterInterface):
         return False
 
     def get_binwidth(self):
-        print('get_binwidth')
         """
         returns the width of a single timebin in the timetrace in seconds
         """
@@ -547,15 +530,10 @@ class NIFastCounter(Base, SlowCounterInterface, FastCounterInterface):
 
     def start_measure(self):
 
-        print('start_measure')
-
-
         self.meas_run = True  # to start the measurement u need to pass this serting
 
         self.start(int(self._record_length_ns / 1e6))  # Measurement time in millisec (unit ms) it is acq time which should be between 1 to... ms
-        # print('start measure2')
         self.sigReadoutNI.emit()
-        # print('start measure3')
 
     def stop_measure(self):
         try:
@@ -580,13 +558,10 @@ class NIFastCounter(Base, SlowCounterInterface, FastCounterInterface):
 
         if not self.meas_run:
             with self.threadlock:
-                # self.unlock()
-                #    print('unlock should be defined') #unlock should be defined
                 try:
                     self.stop_device()
                     self.numberofsweeps = 1
                     self.mycounter = 1
-                # print('measurement is done')
                 except:
                     print('measurement is not stopped')
                 return
