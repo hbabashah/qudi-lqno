@@ -269,7 +269,28 @@ class MicrowaveSmbv(Base, MicrowaveInterface):
         mode, dummy = self.get_status()
         actual_freq = self.get_frequency()
         actual_power = self.get_power()
-        return actual_freq, actual_power, mode 
+        return actual_freq, actual_power, mode
+
+########configure the pulse modulation settings for external modulation source##################
+
+    def configure_pulse_modulation(self):
+        print('inside configure_pulse_modulation')
+        self._command_wait('SOURce:PULM:SOURce EXT')
+        print('inside configure_pulse_modulation,SOURce: PULM:SOURce EXT')
+        #self._command_wait('SOURce:PULM:POLarity NORMal')
+        self._command_wait('SOURce:PULM:STATe 1')
+        #self._command_wait('SOURce:PULM:IMPedance G50')
+
+        return 0
+
+    def pulse_activate_signal_output(self):
+        print('inside pulse_activate_signal_output')
+        #self._command_wait('SOURce: PGENerator:OUTPut: STATe 1')
+        self._command_wait('SOURce: PULM:STATe 1')
+        print('inside pulse_activate_signal_output, SOURce: PULM:STATe 1')
+        self._command_wait('OUTPut1: STATe 1')
+        return 0
+    
     
     
     def list_on(self):
