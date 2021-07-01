@@ -54,6 +54,9 @@ class NICard_Acquisition(Base, dummy_interface):
 
 
     def on_deactivate(self):
+		"""
+        Deinitialisation performed during deactivation of the module.
+        """
         daq.DAQmxStopTask(self._ai_task)
         daq.DAQmxClearTask(self._ai_task)
 
