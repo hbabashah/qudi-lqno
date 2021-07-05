@@ -48,6 +48,9 @@ class ConfocalComplexGUI(GUIBase):
     SigCordinateSparamChanged = QtCore.Signal(float, float, float,float,float,float)
     SigCordinateChanged  = QtCore.Signal(float, float,float)
     SigScopeParamChanged = QtCore.Signal(float,float)
+    SigSetPulseChanged = QtCore.Signal(float,float,float,float)
+    SigPulseAnalysisChanged = QtCore.Signal(float,float,float,float,float)
+    SigNavgChanged = QtCore.Signal(float)
 
     def __init__(self, config, **kwargs):
         super().__init__(config=config, **kwargs)
@@ -97,7 +100,7 @@ class ConfocalComplexGUI(GUIBase):
         self.xy_cb = ColorBar(self.my_colors.cmap_normed, width=100, cb_min=0, cb_max=100)
         self._mw.xy_cb_ViewWidget.addItem(self.xy_cb)
         self._mw.xy_cb_ViewWidget.hideAxis('bottom')
-        self._mw.xy_cb_ViewWidget.setLabel('left', 'Fluorescence', units='V')
+        self._mw.xy_cb_ViewWidget.setLabel('left', 'Fluorescence', units='mV')
         self._mw.xy_cb_ViewWidget.setMouseEnabled(x=False, y=False)
         self._mw.xy_ViewWidget.addItem(self.xy_image)
 
@@ -106,7 +109,7 @@ class ConfocalComplexGUI(GUIBase):
         self.xy_cb_arb = ColorBar(self.my_colors.cmap_normed, width=100, cb_min=0, cb_max=100)
         self._mw.xy_cb_ViewWidget_arb.addItem(self.xy_cb_arb)
         self._mw.xy_cb_ViewWidget_arb.hideAxis('bottom')
-        self._mw.xy_cb_ViewWidget_arb.setLabel('left', 'Fluorescence', units='V')
+        self._mw.xy_cb_ViewWidget_arb.setLabel('left', 'a.u.', units='x1e3')
         self._mw.xy_cb_ViewWidget_arb.setMouseEnabled(x=False, y=False)
         self._mw.xy_ViewWidget_arb.addItem(self.xy_image_arb)
 
@@ -121,6 +124,18 @@ class ConfocalComplexGUI(GUIBase):
         self._mw.npts_doubleSpinBox.editingFinished.connect(self.change_set_ODMR)
         self._mw.int_time_doubleSpinBox.editingFinished.connect(self.change_scope_param)
         self._mw.navg_doubleSpinBox.editingFinished.connect(self.change_scope_param)
+
+        self._mw.time_stop_doubleSpinBox.editingFinished.connect(self.set_pulse)
+        self._mw.npts_doubleSpinBox.editingFinished.connect(self.set_pulse)
+        self._mw.time_start_doubleSpinBox.editingFinished.connect(self.set_pulse)
+        self._mw.rabi_period_doubleSpinBox.editingFinished.connect(self.set_pulse)
+
+
+        self._mw.threshold_doubleSpinBox.editingFinished.connect(self.change_pulse_analysis_param)
+        self._mw.time_reference_doubleSpinBox.editingFinished.connect(self.change_pulse_analysis_param)
+        self._mw.time_signal_doubleSpinBox.editingFinished.connect(self.change_pulse_analysis_param)
+        self._mw.time_reference_start_doubleSpinBox.editingFinished.connect(self.change_pulse_analysis_param)
+        self._mw.time_signal_start_doubleSpinBox.editingFinished.connect(self.change_pulse_analysis_param)
 
 
         self._mw.fmin_doubleSpinBox.editingFinished.connect(self.change_sweep_param)
@@ -145,6 +160,20 @@ class ConfocalComplexGUI(GUIBase):
         self._mw.movetoxy_btn.clicked.connect(self._confocallogic.move_to_position)
         self.SigStartAcquisition.connect(self._confocallogic.start_data_acquisition)
         self.SigStopAcquisition.connect(self._confocallogic.stop_data_acquisition)
+        self.SigNavgChanged.connect(self._confocallogic.set_navg, QtCore.Qt.QueuedConnection)
+
+        self._mw.time_start_doubleSpinBox.setValue(self._confocallogic.time_start) # Status var
+        self._mw.rabi_period_doubleSpinBox.setValue(self._confocallogic.rabi_period) # Status var
+        self._mw.navg_doubleSpinBox.setValue(self._confocallogic.navg) # Status var
+        self._mw.npts_doubleSpinBox.setValue(self._confocallogic.npts) # Status var
+        self.SigSetPulseChanged.connect(self._confocallogic.set_pulse, QtCore.Qt.QueuedConnection)
+        self._mw.time_stop_doubleSpinBox.setValue(self._confocallogic.time_stop) # Status var
+        self.SigPulseAnalysisChanged.connect(self._confocallogic.set_pulse_analysi_param, QtCore.Qt.QueuedConnection)
+        self._mw.threshold_doubleSpinBox.setValue(self._confocallogic.threshold) # Status var
+        self._mw.time_reference_doubleSpinBox.setValue(self._confocallogic.time_reference) # Status var
+        self._mw.time_signal_doubleSpinBox.setValue(self._confocallogic.time_signal) # Status var
+        self._mw.time_reference_start_doubleSpinBox.setValue(self._confocallogic.time_reference_start) # Status var
+        self._mw.time_signal_start_doubleSpinBox.setValue(self._confocallogic.time_signal_start) # Status var
 
 
         self.SigFcwChanged.connect(self._confocallogic.set_fcw, QtCore.Qt.QueuedConnection)
@@ -152,7 +181,7 @@ class ConfocalComplexGUI(GUIBase):
         self.SigPcwChanged.connect(self._confocallogic.set_pcw, QtCore.Qt.QueuedConnection)
 
         self._mw.pcw_doubleSpinBox.setValue(self._confocallogic.pcw) # Status var
-        self._mw.npts_doubleSpinBox.setValue(self._confocallogic.npts) # Status var
+        self._mw.npts_ODMR_doubleSpinBox.setValue(self._confocallogic.npts) # Status var
         self.SigSetODMRChanged.connect(self._confocallogic.set_ODMR, QtCore.Qt.QueuedConnection)
         self._mw.stime_doubleSpinBox.setValue(self._confocallogic.stime) # Status var
         self.SigFsweepChanged.connect(self._confocallogic.set_sweep_param, QtCore.Qt.QueuedConnection)
@@ -202,7 +231,8 @@ class ConfocalComplexGUI(GUIBase):
         self._mw.ynpts_doubleSpinBox.editingFinished.disconnect()
         self._mw.int_time_doubleSpinBox.editingFinished.disconnect()
         self.SigScopeParamChanged.disconnect()
-
+        self._mw.time_start_doubleSpinBox.editingFinished.disconnect()
+        self._mw.rabi_period_doubleSpinBox.editingFinished.disconnect()
         self._mw.navg_doubleSpinBox.editingFinished.disconnect()
         self.SigNavgChanged.disconnect()
         self._mw.close()
@@ -244,8 +274,8 @@ class ConfocalComplexGUI(GUIBase):
 
 
         stime = self._mw.stime_doubleSpinBox.value()
-        npts = self._mw.npts_doubleSpinBox.value()
-        self.SigSetODMRChanged.emit(stime,npts)
+        nptsODMR = self._mw.npts_ODMR_doubleSpinBox.value()
+        self.SigSetODMRChanged.emit(stime,nptsODMR)
     def change_sweep_param(self):
 
 
@@ -288,10 +318,12 @@ class ConfocalComplexGUI(GUIBase):
         minval = np.min(xy_image_data[np.nonzero(xy_image_data)])
         maxval = np.max(xy_image_data[np.nonzero(xy_image_data)])
         self.xy_image.setImage(image=xy_image_data,levels=(minval, maxval))
-        self.xy_cb.refresh_colorbar(minval, maxval)
+        print(minval)
+        print(maxval)
+        self.xy_cb.refresh_colorbar(minval*1e3, maxval*1e3)
         xMin=self._confocallogic.xmin
         xMax=self._confocallogic.xmax
-        yMin=self._confocallogic.xmin
+        yMin=self._confocallogic.ymin
         yMax=self._confocallogic.ymax
         self.image_x_padding=0.1e-6
         self.image_y_padding = 0.1e-6
@@ -319,10 +351,10 @@ class ConfocalComplexGUI(GUIBase):
         minval = np.min(xy_image_arb_data[np.nonzero(xy_image_arb_data)])
         maxval = np.max(xy_image_arb_data[np.nonzero(xy_image_arb_data)])
         self.xy_image_arb.setImage(image=xy_image_arb_data,levels=(minval, maxval))
-        self.xy_cb_arb.refresh_colorbar(minval, maxval)
+        self.xy_cb_arb.refresh_colorbar(minval*1e3, maxval*1e3)
         xMin=self._confocallogic.xmin
         xMax=self._confocallogic.xmax
-        yMin=self._confocallogic.xmin
+        yMin=self._confocallogic.ymin
         yMax=self._confocallogic.ymax
         self.image_x_padding=0.1e-6
         self.image_y_padding = 0.1e-6
@@ -365,3 +397,19 @@ class ConfocalComplexGUI(GUIBase):
         self._mw.show()
         self._mw.activateWindow()
         self._mw.raise_()
+
+    def change_navg(self):
+
+
+        navg = self._mw.navg_doubleSpinBox.value()
+        self.SigNavgChanged.emit(navg)
+
+    def change_pulse_analysis_param(self):
+
+
+        threshold = self._mw.threshold_doubleSpinBox.value()
+        time_reference = self._mw.time_reference_doubleSpinBox.value()
+        time_reference_start = self._mw.time_reference_start_doubleSpinBox.value()
+        time_signal = self._mw.time_signal_doubleSpinBox.value()
+        time_signal_start = self._mw.time_signal_start_doubleSpinBox.value()
+        self.SigPulseAnalysisChanged.emit(threshold,time_reference,time_signal,time_reference_start,time_signal_start)
