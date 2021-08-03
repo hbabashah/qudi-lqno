@@ -138,6 +138,33 @@ class MicrowaveSMF100a(Base, dummy_interface):
     #                RF Frequeny sweep
     #
     #########################################################
+    def set_freq_sweep(self, sweep_mode, freq_i, freq_f, dfreq, dwell_time):
+        """ Set parameters of a frequency sweep
+        - sweep_mode : can be 'STEP' or 'SINGLE'
+        - freq_i, freq_f : start and end frequency (included in scan), in Hz
+        - dfreq : frequency step, in Hz
+        """
+        # Go to start frequency (must be placed before switching to sweep mode)
+        self.set_fcw(freq_i)
+
+        # Fixed parameters for a scan
+        self.write(':FREQ:MODE SWEEP')
+        self.write(':TRIG:FSW:SOUR EXT')
+        self.write(':SWE:SPAC LIN')
+
+        # Set sweep mode
+        if sweep_mode == 'STEP':
+            self.write(':SWE:MODE STEP')
+        elif sweep_mode == 'SINGLE':
+            self.write(':SWE:MODE AUTO')
+        else:
+            raise ValueError('Desired sweep_mode is not recognized')
+
+        # User defined parameters
+        self.write(':FREQ:START %s' % freq_i)
+        self.write(':FREQ:STOP %s' % freq_f)
+        self.write(':SWE:STEP %s' % dfreq)
+        self.write(':SWE:DWELL %s' % dwell_time)
 
     def set_sweep_param(self, freq_i, freq_f, dfreq):
         """ Set parameters of a frequency sweep
