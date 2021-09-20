@@ -125,6 +125,8 @@ class CWODMRGUI(GUIBase):
         self.SigScopeParamChanged.disconnect()
         self._mw.fmin_doubleSpinBox.editingFinished.disconnect()
         self.SigFsweepChanged.disconnect()
+        self._mw.fmax_doubleSpinBox.editingFinished.disconnect()
+        self._mw.fstep_doubleSpinBox.editingFinished.disconnect()
         self._mw.close()
         return 0
 
@@ -133,10 +135,9 @@ class CWODMRGUI(GUIBase):
         """
         H.Babashah - Send user order to start acquisition to the logic.
         """
-        self._mw.actionStop.setEnabled(True)
         self._mw.actionStart.setEnabled(False)
         self._cwodmrlogic.stop_acq=False
-        self._mw.multi_span_checkBox.isChecked()
+        self.SigStartAcquisition.emit()
     def Toggle_actionstart(self):
 		"""
         H.Babashah - toggle between strat and stop buttons.
