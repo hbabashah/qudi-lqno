@@ -22,13 +22,13 @@ class CWODMRlogic(GenericLogic):
     pulser= Connector(interface='dummy_interface')
     savelogic = Connector(interface='SaveLogic')
     taskrunner = Connector(interface='TaskRunner')
-    pcw = StatusVar('pcw', 0)# CW power
+    pcw = StatusVar('pcw', -10)# CW power
     fmin = StatusVar('fmin', 2.85e9)# sweep frequency min
     fmax = StatusVar('fmax', 2.89e9)# sweep frequency max
     fstep = StatusVar('fstep', 1e6)# sweep frequency step
     stime = StatusVar('stime', 0.001)# Step time
-    navg = StatusVar('navg', 1)# number of averages
-    npts = StatusVar('npts', 10)# number of points
+    navg = StatusVar('navg', 40)# number of averages
+    npts = StatusVar('npts', 500)# number of points
 
     # Update signals
     SigDataUpdated = QtCore.Signal(np.ndarray, np.ndarray)
@@ -47,6 +47,12 @@ class CWODMRlogic(GenericLogic):
         self._save_logic = self.savelogic()
         self._taskrunner = self.taskrunner()
 
+        """ Needs to be implemented
+        # Get hardware constraints
+        limits = self.get_hw_constraints()
+        """
+
+        self.data_freq = np.array([])
         self.data_spectrum = np.array([])
 
     def on_deactivate(self):
@@ -54,6 +60,7 @@ class CWODMRlogic(GenericLogic):
         Deinitialisation performed during deactivation of the module.
         """
         # Disconnect signals
+        #self.sigDataUpdated.disconnect()
     def start_data_acquisition(self):
         startThread = Thread(target=self.start_data_acquisition_thread)
         startThread.start()
@@ -76,7 +83,8 @@ class CWODMRlogic(GenericLogic):
             self._scope.set_trigger_source(ChannelTrigNumber)
 
             self._scope.set_delay(IntegrationTime/2)
-            self._scope.set_Center_Tscale(1, IntegrationTime / 1.25)  # 1.25*10
+            self._scope.set_timebase_range(IntegrationTime)
+            #self._scope.set_Center_Tscale(1, IntegrationTime / 1.25)  # 1.25*10
             self._scope.set_acquisition_type(1) #AVG type ACQ
             self._scope.set_trigger_sweep(1)  # set normal mode for ACQ of Oscope
 
@@ -86,6 +94,7 @@ class CWODMRlogic(GenericLogic):
 
             self._pulser.set_ODMR(self.stime, self.npts_frequency)
             self._pulser.start_stream()
+            print('meaow')
             self._scope.set_acquisition_count(2)  # set the number of avg for oscope
 
             self._scope.set_ODMR_scale(1)
