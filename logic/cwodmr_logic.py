@@ -39,7 +39,9 @@ class CWODMRlogic(GenericLogic):
         self.threadlock = Mutex()
 
     def on_activate(self):
-
+        """
+        activate the module
+        """
         # Get connectors
         self._mw_device = self.mw_source()
         self._scope = self.scope()
@@ -60,13 +62,20 @@ class CWODMRlogic(GenericLogic):
         Deinitialisation performed during deactivation of the module.
         """
         # Disconnect signals
-        #self.sigDataUpdated.disconnect()
+        self.sigDataUpdated.disconnect()
+		self.SigToggleAction.disconnect()
     def start_data_acquisition(self):
+		"""
+        Trigger start data aqusition
+        """
         startThread = Thread(target=self.start_data_acquisition_thread)
         startThread.start()
 
     def start_data_acquisition_thread(self):
-     #   for i in range(30):
+		"""
+        Perform data aquisition in thread
+		
+        """
         with self.threadlock:
             self._mw_device.set_sweep_param(self.fmin, self.fmax, self.fstep)
 
@@ -94,7 +103,6 @@ class CWODMRlogic(GenericLogic):
 
             self._pulser.set_ODMR(self.stime, self.npts_frequency)
             self._pulser.start_stream()
-            print('meaow')
             self._scope.set_acquisition_count(2)  # set the number of avg for oscope
 
             self._scope.set_ODMR_scale(1)
@@ -106,7 +114,7 @@ class CWODMRlogic(GenericLogic):
 
             DATA = self._scope.get_data([ChannelNumber])          # get the data from oscope
 
-            self._mw_device.off()
+            self._mw_device.off() # turn off the microwave source
 
             if self.stop_acq == False:
                 ODMR_Signal=np.array(DATA[ChannelNumber])
@@ -114,22 +122,45 @@ class CWODMRlogic(GenericLogic):
 
             self.SigToggleAction.emit()
     def stop_data_acquisition(self,state):
+		"""
+        Trigger start data aqusition
+		@param bool state : state of the measurement True continue False pause
+        """
         #Fix me mutex threadlock might be required to add
         # if self.module_state() == 'locked':
         #     self.module_state.unlock()
         #     return -1
         self.stop_acq = True
     def set_pcw(self, pcw):
+		"""
+        set microwave CW power
+		@param float pcw : microwave power in dBm
+        """
         self._mw_device.set_pcw(pcw)
         self.pcw = pcw
     def set_ODMR(self, stime):
+		"""
+        set ODMR sweep step time
+		@param float stime : step time in seconds
+        """
         self.stime = stime
     def set_scope_param(self,navg,npts):
+		"""
+        set oscope parameters
+		@param int navg : number of averages of scope
+		@param int npts : number of sampling points
+        """
         self.navg = navg
         self.npts = npts
 
 
     def set_sweep_param(self, fmin,fmax,fstep):
+		"""
+        set ODMR microwave sweep parameters
+		@param int fmin : microwave minimum frequency in Hz
+		@param int fmax : microwave maximumu frequency in Hz
+		@param int fstep : microwave frequency step in Hz
+        """
         self.fmin = fmin
         self.fmax = fmax
         self.fstep = fstep
