@@ -24,6 +24,8 @@ class Confocallogic(GenericLogic):
     taskrunner = Connector(interface='TaskRunner')
     fcw = StatusVar('fcw', 2.87e9)# CW frequency
     pcw = StatusVar('pcw', -10)# CW power
+    fmin = StatusVar('fmin', 2.85e9)# sweep frequency min
+    fmax = StatusVar('fmax', 2.89e9)# sweep frequency max
     fstep = StatusVar('fstep', 1e6)# sweep frequency step
     npts = StatusVar('npts', 40)# number of points
     stime = StatusVar('stime', 0.001)# Step time
@@ -33,6 +35,10 @@ class Confocallogic(GenericLogic):
     ymin = StatusVar('ymin', 0)# sweep y min
     ymax = StatusVar('ymax', 1e-6)# sweep y max
     ynpts = StatusVar('ynpts', 10)# sweep y points
+    xpos = StatusVar('xpos', 0)# x position
+    ypos = StatusVar('ypos', 0)# y position
+    navg = StatusVar('navg', 2)# number of averages
+    int_time = StatusVar('int_time', 20e-9)# integration time
 
 
     # Update signals
@@ -64,6 +70,8 @@ class Confocallogic(GenericLogic):
         """
         Deinitialisation performed during deactivation of the module.
         """
+        # Disconnect signals
+        #self.sigDataUpdated.disconnect()
 
     def start_data_acquisition(self):
         startThread = Thread(target=self.start_data_acquisition_thread)
@@ -134,6 +142,18 @@ class Confocallogic(GenericLogic):
         self.ypos = ypos
 
 
+    def move_to_position(self):
+        self._pulser.set_confocal(self.xpos, self.ypos)
+        self._scope.set_Center_Tscale(1, self.int_time / 1.25)  # 1.25*10
+        self._scope.set_trigger_sweep(0)  # set normal mode for ACQ of Oscope
+        self._pulser.start_stream()
+
+        self._scope.set_scope_range(1, 3)
+        self._scope.set_Voffset(1, 1.5, 1)
+        self.ChannelNumber=1
+        DATA = self._scope.get_data([self.ChannelNumber])
+        self.SigDataUpdated.emit(np.array(DATA[0]), np.array(DATA[self.ChannelNumber]))
+
     def set_fcw(self, fcw):
         self._mw_device.set_fcw(fcw)
         self.fcw = fcw
@@ -155,3 +175,19 @@ class Confocallogic(GenericLogic):
       #  self._mw_device.set_ODMR(stime,npts)
         self.stime = stime
         self.npts = npts
+
+    def set_sweep_param(self, fmin,fmax,fstep):
+        self._mw_device.set_sweep_param(fmin,fmax,fstep)
+        self.fmin = fmin
+        self.fmax = fmax
+        self.fstep = fstep
+    def set_scope_param(self,int_time,navg):
+
+        self.int_time = int_time
+        self.navg = navg
+        self._scope.set_Center_Tscale(1, int_time / 1.25)  # 1.25*10
+        if navg==1:
+            self._scope.set_acquisition_type(0)  # Normal
+        else:
+            self._scope.set_acquisition_type(1)  # AVG type ACQ
+            self._scope.set_acquisition_count(self.navg)  # set the number of avg for oscope
