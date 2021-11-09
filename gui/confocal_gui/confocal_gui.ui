@@ -42,8 +42,8 @@
        <enum>QFrame::Raised</enum>
       </property>
       <layout class="QGridLayout" name="gridLayout_4">
-       <item row="2" column="5">
-        <widget class="QLabel" name="label_11">
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_13">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -51,138 +51,11 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string># points</string>
+          <string>Ymin</string>
          </property>
         </widget>
        </item>
-       <item row="4" column="0" colspan="3">
-        <widget class="PlotWidget" name="dummy_graph"/>
-       </item>
-       <item row="2" column="6">
-        <widget class="QSpinBox" name="ynpts_doubleSpinBox">
-         <property name="minimum">
-          <number>0</number>
-         </property>
-         <property name="maximum">
-          <number>2000</number>
-         </property>
-         <property name="singleStep">
-          <number>1</number>
-         </property>
-         <property name="value">
-          <number>10</number>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="4">
-        <widget class="ScienDSpinBox" name="ymax_doubleSpinBox">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="suffix">
-          <string>m</string>
-         </property>
-         <property name="decimals">
-          <number>6</number>
-         </property>
-         <property name="minimum">
-          <double>-0.000010000000000</double>
-         </property>
-         <property name="maximum">
-          <double>0.000010000000000</double>
-         </property>
-         <property name="singleStep">
-          <double>0.010000000000000</double>
-         </property>
-         <property name="value">
-          <double>0.000001000000000</double>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="5">
-        <widget class="QLabel" name="label_17">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Map</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="4">
-        <widget class="ScienDSpinBox" name="xmax_doubleSpinBox">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="suffix">
-          <string>m</string>
-         </property>
-         <property name="decimals">
-          <number>6</number>
-         </property>
-         <property name="minimum">
-          <double>-0.000010000000000</double>
-         </property>
-         <property name="maximum">
-          <double>0.000010000000000</double>
-         </property>
-         <property name="singleStep">
-          <double>0.010000000000000</double>
-         </property>
-         <property name="value">
-          <double>0.000001000000000</double>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="3">
-        <widget class="QLabel" name="label_9">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Xmax</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="5">
-        <widget class="QLabel" name="label_10">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string># points</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="label_18">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string># of Avgs</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="2">
+       <item row="3" column="2">
         <widget class="ScienDSpinBox" name="ymin_doubleSpinBox">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -210,8 +83,8 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label_13">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_15">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -219,11 +92,37 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>Ymin</string>
+          <string>                          X</string>
          </property>
         </widget>
        </item>
        <item row="1" column="0">
+        <widget class="QLabel" name="label_18">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string># of Avgs</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="3">
+        <widget class="QLabel" name="label_14">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>                             Y</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
         <widget class="QLabel" name="label_8">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -236,8 +135,8 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="3">
-        <widget class="QLabel" name="label_12">
+       <item row="1" column="3">
+        <widget class="QLabel" name="label_19">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -245,30 +144,39 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>Ymax</string>
+          <string>Int Time</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="6">
-        <widget class="QSpinBox" name="xnpts_doubleSpinBox">
+       <item row="1" column="4">
+        <widget class="ScienDSpinBox" name="int_time_doubleSpinBox">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="suffix">
+          <string>s</string>
+         </property>
+         <property name="decimals">
+          <number>6</number>
+         </property>
          <property name="minimum">
-          <number>0</number>
+          <double>-0.100000000000000</double>
          </property>
          <property name="maximum">
-          <number>2000</number>
+          <double>0.100000000000000</double>
          </property>
          <property name="singleStep">
-          <number>1</number>
+          <double>0.010000000000000</double>
          </property>
          <property name="value">
-          <number>10</number>
-         </property>
-         <property name="displayIntegerBase">
-          <number>10</number>
+          <double>0.000001000000000</double>
          </property>
         </widget>
        </item>
-       <item row="1" column="2">
+       <item row="2" column="2">
         <widget class="ScienDSpinBox" name="xmin_doubleSpinBox">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -296,7 +204,128 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="2">
+       <item row="2" column="3">
+        <widget class="QLabel" name="label_9">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Xmax</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="4">
+        <widget class="ScienDSpinBox" name="xmax_doubleSpinBox">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="suffix">
+          <string>m</string>
+         </property>
+         <property name="decimals">
+          <number>6</number>
+         </property>
+         <property name="minimum">
+          <double>-0.000010000000000</double>
+         </property>
+         <property name="maximum">
+          <double>0.000010000000000</double>
+         </property>
+         <property name="singleStep">
+          <double>0.010000000000000</double>
+         </property>
+         <property name="value">
+          <double>0.000001000000000</double>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="5">
+        <widget class="QLabel" name="label_10">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string># points</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="6">
+        <widget class="QSpinBox" name="xnpts_doubleSpinBox">
+         <property name="minimum">
+          <number>0</number>
+         </property>
+         <property name="maximum">
+          <number>2000</number>
+         </property>
+         <property name="singleStep">
+          <number>1</number>
+         </property>
+         <property name="value">
+          <number>10</number>
+         </property>
+         <property name="displayIntegerBase">
+          <number>10</number>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="5" colspan="2">
+        <widget class="QPushButton" name="movetoxy_btn">
+         <property name="text">
+          <string>Move to XY (Laser on)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="4">
+        <widget class="ScienDSpinBox" name="ypos_doubleSpinBox">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="suffix">
+          <string>m</string>
+         </property>
+         <property name="decimals">
+          <number>6</number>
+         </property>
+         <property name="minimum">
+          <double>-0.000010000000000</double>
+         </property>
+         <property name="maximum">
+          <double>0.000010000000000</double>
+         </property>
+         <property name="singleStep">
+          <double>0.010000000000000</double>
+         </property>
+         <property name="value">
+          <double>0.000010000000000</double>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="3">
+        <widget class="QLabel" name="label_12">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Ymax</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
         <widget class="QSpinBox" name="navg_doubleSpinBox">
          <property name="minimum">
           <number>0</number>
@@ -312,7 +341,7 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="1">
+       <item row="4" column="1">
         <widget class="QLabel" name="label_16">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -325,7 +354,7 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="3" colspan="4">
+       <item row="5" column="3" colspan="4">
         <widget class="ScanPlotWidget" name="xy_ViewWidget">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -335,6 +364,123 @@
          </property>
          <property name="transformationAnchor">
           <enum>QGraphicsView::AnchorUnderMouse</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0" colspan="3">
+        <widget class="PlotWidget" name="dummy_graph"/>
+       </item>
+       <item row="3" column="5">
+        <widget class="QLabel" name="label_11">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string># points</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="6">
+        <widget class="QSpinBox" name="ynpts_doubleSpinBox">
+         <property name="minimum">
+          <number>0</number>
+         </property>
+         <property name="maximum">
+          <number>2000</number>
+         </property>
+         <property name="singleStep">
+          <number>1</number>
+         </property>
+         <property name="value">
+          <number>10</number>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="4">
+        <widget class="ScienDSpinBox" name="ymax_doubleSpinBox">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="suffix">
+          <string>m</string>
+         </property>
+         <property name="decimals">
+          <number>6</number>
+         </property>
+         <property name="minimum">
+          <double>-0.000010000000000</double>
+         </property>
+         <property name="maximum">
+          <double>0.000010000000000</double>
+         </property>
+         <property name="singleStep">
+          <double>0.010000000000000</double>
+         </property>
+         <property name="value">
+          <double>0.000001000000000</double>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="7">
+        <widget class="PlotWidget" name="xy_cb_ViewWidget">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>80</width>
+           <height>16777215</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="5">
+        <widget class="QLabel" name="label_17">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Map</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="ScienDSpinBox" name="xpos_doubleSpinBox">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="suffix">
+          <string>m</string>
+         </property>
+         <property name="decimals">
+          <number>6</number>
+         </property>
+         <property name="minimum">
+          <double>-0.000010000000000</double>
+         </property>
+         <property name="maximum">
+          <double>0.000010000000000</double>
+         </property>
+         <property name="singleStep">
+          <double>0.010000000000000</double>
+         </property>
+         <property name="value">
+          <double>0.000010000000000</double>
          </property>
         </widget>
        </item>

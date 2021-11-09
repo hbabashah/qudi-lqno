@@ -246,7 +246,7 @@ class ConfocalComplexGUI(GUIBase):
 
         self._mw.actionStart.setEnabled(False)
         self._confocallogic.stop_acq=False
-        self.SigStartAcquisition.emit()#self._mw.multi_span_checkBox.isChecked()
+        self.SigStartAcquisition.emit()
 
 
     def stop_data_acquisition(self):
@@ -256,28 +256,39 @@ class ConfocalComplexGUI(GUIBase):
 
         self.SigStopAcquisition.emit(True)
     def Toggle_actionstart(self):
+		"""
+        H.Babashah - toggle between strat and stop buttons.
+        """
         self._mw.actionStart.setEnabled(True)
 
     def change_fcw(self):
-
+        """
+        H.Babashah - set the microwave CW frequency
+        """
 
         fcw = self._mw.fcw_doubleSpinBox.value()
         self.SigFcwChanged.emit(fcw)
     def change_pcw(self):
-
+        """
+        H.Babashah - set the microwave CW power
+        """
 
         pcw = self._mw.pcw_doubleSpinBox.value()
         self.SigPcwChanged.emit(pcw)
 
 
     def change_set_ODMR(self):
-
+        """
+        H.Babashah - update ODMR parameters
+        """
 
         stime = self._mw.stime_doubleSpinBox.value()
         nptsODMR = self._mw.npts_ODMR_doubleSpinBox.value()
         self.SigSetODMRChanged.emit(stime,nptsODMR)
     def change_sweep_param(self):
-
+        """
+        H.Babashah - update microwave frequency sweep parameters
+        """
 
         fmin = self._mw.fmin_doubleSpinBox.value()
         fmax = self._mw.fmax_doubleSpinBox.value()
@@ -287,7 +298,9 @@ class ConfocalComplexGUI(GUIBase):
 
 
     def change_cordinate_sparam(self):
-
+        """
+         set coridnate sweep of piezo 
+        """
 
         xmin = self._mw.xmin_doubleSpinBox.value()
         xmax = self._mw.xmax_doubleSpinBox.value()
@@ -298,7 +311,9 @@ class ConfocalComplexGUI(GUIBase):
         self.SigCordinateSparamChanged.emit(xmin,xmax,xnpts,ymin,ymax,ynpts)
 
     def change_cordinate(self):
-
+        """
+         change coridnate of piezo to xpos and ypos
+        """
 
         xpos = self._mw.xpos_doubleSpinBox.value()
         ypos = self._mw.ypos_doubleSpinBox.value()

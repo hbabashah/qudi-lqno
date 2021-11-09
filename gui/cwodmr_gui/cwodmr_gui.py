@@ -151,7 +151,7 @@ class CWODMRGUI(GUIBase):
         self.SigStopAcquisition.emit(True)
     def change_pcw(self):
         """
-        H.Babashah - set the microwave CW frequency
+        H.Babashah - set the microwave CW power
         """
 
         pcw = self._mw.pcw_doubleSpinBox.value()

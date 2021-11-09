@@ -45,6 +45,7 @@ class ConfocalGUI(GUIBase):
     SigPcwChanged = QtCore.Signal(float)
     SigSetODMRChanged = QtCore.Signal(float,float)
     SigFsweepChanged = QtCore.Signal(float,float,float)
+    SigCordinateSparamChanged = QtCore.Signal(float, float, float,float,float,float)
     SigCordinateChanged  = QtCore.Signal(float, float)
     SigScopeParamChanged = QtCore.Signal(float,float)
     def __init__(self, config, **kwargs):
@@ -119,6 +120,8 @@ class ConfocalGUI(GUIBase):
         self._mw.ymax_doubleSpinBox.editingFinished.connect(self.change_cordinate_sparam)
         self._mw.ynpts_doubleSpinBox.editingFinished.connect(self.change_cordinate_sparam)
 
+        self._mw.xpos_doubleSpinBox.editingFinished.connect(self.change_cordinate)
+        self._mw.ypos_doubleSpinBox.editingFinished.connect(self.change_cordinate)
 
         # Connections to logic
         self._mw.actionStop.triggered.connect(self.stop_data_acquisition)
@@ -156,7 +159,7 @@ class ConfocalGUI(GUIBase):
 
     def on_deactivate(self):
         """
-        H.Babashah Reverse steps of activation and also close the main window and do whatever when a module is closed using closed btn in task manager
+        Reverse steps of activation and also close the main window and do whatever when a module is closed using closed btn in task manager
 
         @return int: error code (0:OK, -1:error)
         """
@@ -191,7 +194,7 @@ class ConfocalGUI(GUIBase):
 
     def start_data_acquisition(self):
         """
-        start the confocal scan and get the data
+        H.Babashah - start the confocal scan and get the data
         """
 
         self._mw.actionStart.setEnabled(False)
@@ -207,23 +210,20 @@ class ConfocalGUI(GUIBase):
         self.SigStopAcquisition.emit(True)
     def Toggle_actionstart(self):
 		"""
-        Toggle between start and stop
-		make the button enabled
+        H.Babashah - toggle between strat and stop buttons.
         """
         self._mw.actionStart.setEnabled(True)
 
     def change_fcw(self):
-		"""
-        set microwave CW frequency
-		@param float fcw : microwave frequency in Hz
+        """
+        H.Babashah - set the microwave CW frequency
         """
 
         fcw = self._mw.fcw_doubleSpinBox.value()
         self.SigFcwChanged.emit(fcw)
     def change_pcw(self):
-		"""
-        change microwave CW power
-		@param float pcw : microwave power in dBm
+        """
+        H.Babashah - set the microwave CW power
         """
 
         pcw = self._mw.pcw_doubleSpinBox.value()
@@ -231,13 +231,17 @@ class ConfocalGUI(GUIBase):
 
 
     def change_set_ODMR(self):
-
+        """
+        update ODMR parameters
+        """
 
         stime = self._mw.stime_doubleSpinBox.value()
         npts = self._mw.npts_doubleSpinBox.value()
         self.SigSetODMRChanged.emit(stime,npts)
     def change_sweep_param(self):
-
+        """
+        update microwave frequency sweep parameters
+        """
 
         fmin = self._mw.fmin_doubleSpinBox.value()
         fmax = self._mw.fmax_doubleSpinBox.value()
@@ -245,6 +249,28 @@ class ConfocalGUI(GUIBase):
 
         self.SigFsweepChanged.emit(fmin,fmax,fstep)
 
+
+    def change_cordinate_sparam(self):
+        """
+         set coridnate sweep of piezo 
+        """
+
+        xmin = self._mw.xmin_doubleSpinBox.value()
+        xmax = self._mw.xmax_doubleSpinBox.value()
+        xnpts = self._mw.xnpts_doubleSpinBox.value()
+        ymin = self._mw.ymin_doubleSpinBox.value()
+        ymax = self._mw.ymax_doubleSpinBox.value()
+        ynpts = self._mw.ynpts_doubleSpinBox.value()
+        self.SigCordinateSparamChanged.emit(xmin,xmax,xnpts,ymin,ymax,ynpts)
+
+    def change_cordinate(self):
+        """
+         change coridnate of piezo to xpos and ypos
+        """
+
+        xpos = self._mw.xpos_doubleSpinBox.value()
+        ypos = self._mw.ypos_doubleSpinBox.value()
+        self._confocallogic.set_move_to_position(xpos,ypos)
     def update_plot(self, xdata, ydata):
         """
         Updates the plot.
@@ -252,18 +278,37 @@ class ConfocalGUI(GUIBase):
         self.dummy_image.setData(xdata, ydata)
     def update_confocal_plot(self, xy_image_data):
         """
-		Updates the plot.
+        Updates the plot.
         """
         minval = np.min(xy_image_data[np.nonzero(xy_image_data)])
         maxval = np.max(xy_image_data[np.nonzero(xy_image_data)])
-        self.put_cursor_in_xy_scan()
+        self.xy_image.setImage(image=xy_image_data,levels=(minval, maxval))
+        self.xy_cb.refresh_colorbar(minval, maxval)
+        xMin=self._confocallogic.xmin
+        xMax=self._confocallogic.xmax
+        yMin=self._confocallogic.ymin
+        yMax=self._confocallogic.ymax
+        self.image_x_padding=0.1e-6
+        self.image_y_padding = 0.1e-6
+
+        xy_viewbox = self.xy_image.getViewBox()
+
+        xy_viewbox.setLimits(xMin=xMin - (xMax - xMin) * self.image_x_padding,
+                                 xMax=xMax + (xMax - xMin) * self.image_x_padding,
+                                 yMin=yMin - (yMax - yMin) * self.image_y_padding,
+                                 yMax=yMax + (yMax - yMin) * self.image_y_padding)
+        self.xy_resolution=300
+        px_size = ((xMax - xMin) / (self.xy_resolution - 1),
+                   (yMax - yMin) / (self.xy_resolution - 1))
+        self.xy_image.set_image_extent(((xMin - px_size[0] / 2, xMax + px_size[0] / 2),
+                                        (yMin - px_size[1] / 2, yMax + px_size[1] / 2)))
 
         xy_viewbox.updateAutoRange()
         xy_viewbox.updateViewRange()
 
     def change_scope_param(self):
         """
-        H. Babashah- Change the scope parameters
+        Change the scope parameters
         """
 
         int_time = self._mw.int_time_doubleSpinBox.value()
