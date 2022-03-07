@@ -110,7 +110,13 @@ class SRS_lockin(Base, LockinInterface, HardInterface):
         H. Babashah - Gets the global gain output/input of the srs lock-in
         """
 
+        sensitivity = self.get_sensitivity()
         offset, expand = self.get_offset_expand()
+
+        if offset == 0 :
+            return (10*expand)/sensitivity
+        else :
+            self.log.warning('non nul offset on '+self.name+'. Function not implemented.')
 
 
 
@@ -119,3 +125,45 @@ class SRS_lockin(Base, LockinInterface, HardInterface):
 
     def set_frequency(self, value):
         self.cmd.write('FREQ '+str(value))
+		
+		
+
+    def get_sensitivity(self):
+        """
+        H. Babashah - Gets the input sensitivity of the srs lock-in
+        """
+
+        i = int(self.cmd.query('SENS?'))
+
+        sensitivity={
+            0 : 2*10**-9,
+            1 : 5*10**-9,
+            2 : 10*10**-9,
+            3 : 20*10**-9,
+            4 : 50*10**-9,
+            5 : 100*10**-9,
+            6 : 200*10**-9,
+            7 : 500*10**-9,
+            8 : 1*10**-6,
+            9 : 2*1**-6,
+            10 : 5*1**-6,
+            11 : 10*1**-6,
+            12 : 20*1**-6,
+            13 : 50*1**-6,
+            14 : 100*10**-6,
+            15 : 200*1**-6,
+            16 : 500*1**-6,
+            17 : 1*10**-3,
+            18 : 2*10**-3,
+            19 : 5*10**-3,
+            20 : 10*10**-3,
+            21 : 20*10**-3,
+            22 : 50*10**-3,
+            23 : 100*10**-3,
+            24 : 200*10**-3,
+            25 : 500*10**-3,
+            26 : 1
+        }
+
+        return sensitivity.get(i, 'Invalid')
+		
