@@ -83,6 +83,29 @@ class Agilent_35670A(Base, FFTInterface):
         self.log.info('Closed connection to AWG')
 
 
+    def set_span(self, span):
+        """
+        H. Babashah - Sets frequency span on screen.
+        """
+        self.fft.write('FREQuency:SPAN '+str(span))
+        self._span = span
+
+
+    def set_resolution(self, resolution_lines):
+        """
+        H. Babashah - Sets the resolution in lines.
+        """
+        self.fft.write('FREQuency:RESolution ' + str(np.int(resolution_lines)))
+        self._lines = np.int(resolution_lines)
+
+
+    def set_window(self, window):
+        """
+        H. Babashah - Sets the fft window type.
+        """
+        self.fft.write('WINDow:TYPE '+window)
+        self._window = window
+
     def set_unit(self, unit):
         """
         H. Babashah - Sets voltage unit of spectrum
