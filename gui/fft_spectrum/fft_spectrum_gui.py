@@ -118,7 +118,7 @@ class FFTGui(GUIBase):
         """
         H. Babashah - Send user order to start acquisition to the logic.
         """
-        self.SigStartAcquisition.emit(True)
+        self.SigStartAcquisition.emit(self._mw.multi_span_checkBox.isChecked())
 
     def update_plot(self, xdata, ydata):
         """
