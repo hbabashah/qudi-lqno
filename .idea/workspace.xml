@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8f894279-1db8-43c6-9461-b66c22bf2d07" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/gui/cwodmr_gui/cwodmr_gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/cwodmr_gui/cwodmr_gui.py" afterDir="false" />
-    </list>
+    <list default="true" id="8f894279-1db8-43c6-9461-b66c22bf2d07" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -11,12 +9,12 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/hardware/picoquant/picoharp300.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1756">
-              <caret line="1395" selection-start-line="1395" selection-end-line="1395" />
+            <state relative-caret-position="597">
+              <caret line="1425" selection-start-line="1425" selection-end-line="1425" />
               <folding>
                 <element signature="e#858#871#0" expanded="true" />
               </folding>
@@ -46,11 +44,11 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="1">
-    <option name="x" value="596" />
-    <option name="y" value="662" />
-    <option name="width" value="1534" />
-    <option name="height" value="815" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="-1928" />
+    <option name="y" value="-196" />
+    <option name="width" value="1936" />
+    <option name="height" value="1168" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -111,16 +109,11 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="596" y="662" width="1534" height="815" extended-state="1" />
-    <editor active="true" />
+    <frame x="596" y="662" width="1534" height="815" extended-state="0" />
     <layout>
-      <window_info id="Favorites" side_tool="true" />
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Version Control" />
-      <window_info anchor="bottom" id="Python Console" />
-      <window_info anchor="bottom" id="Terminal" />
-      <window_info anchor="bottom" id="Event Log" side_tool="true" />
+      <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Run" order="2" />
@@ -128,6 +121,10 @@
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Version Control" order="7" />
+      <window_info anchor="bottom" id="Terminal" order="8" />
+      <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
+      <window_info anchor="bottom" id="Python Console" order="10" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -136,8 +133,8 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/hardware/picoquant/picoharp300.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1756">
-          <caret line="1395" selection-start-line="1395" selection-end-line="1395" />
+        <state relative-caret-position="597">
+          <caret line="1425" selection-start-line="1425" selection-end-line="1425" />
           <folding>
             <element signature="e#858#871#0" expanded="true" />
           </folding>
