@@ -156,6 +156,7 @@ class ConfocalComplexGUI(GUIBase):
 
         # Connections to logic
         self._mw.mes_type_window_comboBox.currentTextChanged.connect(self._confocallogic.set_mes_type)
+        self._mw.channel_window_comboBox.currentTextChanged.connect(self._confocallogic.set_channel)
         self._mw.int_time_doubleSpinBox.setValue(self._confocallogic.int_time) # Status var
         self._mw.movetoxy_btn.clicked.connect(self._confocallogic.move_to_position)
         self.SigStartAcquisition.connect(self._confocallogic.start_data_acquisition)
@@ -399,13 +400,17 @@ class ConfocalComplexGUI(GUIBase):
         self._mw.raise_()
 
     def change_navg(self):
-
+        """
+        H.Babashah - change the number of averages
+        """
 
         navg = self._mw.navg_doubleSpinBox.value()
         self.SigNavgChanged.emit(navg)
 
     def change_pulse_analysis_param(self):
-
+        """
+        H.Babashah - change  pulse analy sis param
+        """
 
         threshold = self._mw.threshold_doubleSpinBox.value()
         time_reference = self._mw.time_reference_doubleSpinBox.value()
@@ -413,3 +418,4 @@ class ConfocalComplexGUI(GUIBase):
         time_signal = self._mw.time_signal_doubleSpinBox.value()
         time_signal_start = self._mw.time_signal_start_doubleSpinBox.value()
         self.SigPulseAnalysisChanged.emit(threshold,time_reference,time_signal,time_reference_start,time_signal_start)
+
