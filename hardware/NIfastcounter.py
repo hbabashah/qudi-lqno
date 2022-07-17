@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-This file contains the Qudi hardware module for the PicoHarp300.
+This file contains the Qudi hardware module for the NIFastCounter.
 
 Qudi is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -149,7 +149,7 @@ class NIFastCounter(Base, SlowCounterInterface, FastCounterInterface):
             n_samples = 1000
             duty_cycle = 0.5
 
-            my_clock_channel = self.Clock_Channel 
+            my_clock_channel = self.Clock_Channel
             self.Clock.CreateCOPulseChanFreq(my_clock_channel,
                                              "myClockTask",
                                              daq.DAQmx_Val_Hz,
@@ -269,9 +269,9 @@ class NIFastCounter(Base, SlowCounterInterface, FastCounterInterface):
         return 0
 
     def get_counter_channels(self):
-	
+
         """ Return one counter channel. """
-		
+
         return ['Ctr0']
 
     def get_constraints(self):
@@ -334,13 +334,7 @@ class NIFastCounter(Base, SlowCounterInterface, FastCounterInterface):
         number_of_gates: Number of gates in the pulse sequence. Ignore for
                          ungated counter.
         """
-        ''' Just to check:
-        self.Hmode = 0
-        if self.Hmode == 1:
-            self.outputfile = open("HosTest.out", "wb+")
-            
-        '''
-		self.startSweep = 0
+        self.startSweep = 0
         self.mycounter = 1
         self.numberofsweeps = 1
         self.testStatue = 0
@@ -404,7 +398,7 @@ class NIFastCounter(Base, SlowCounterInterface, FastCounterInterface):
             self.stop_measure()
             self.meas_run = False
         except:
-            print('measurement not pauses')
+            self.log.info('measurement not pauses')
 
     def continue_measure(self):
 
@@ -463,7 +457,7 @@ class NIFastCounter(Base, SlowCounterInterface, FastCounterInterface):
                     self.LaserSumhelper = np.zeros(ArraySize + 1)
                     self.firsttimeNI = 0
                 self.LaserSumhelper = LaserSum + self.LaserSumhelper
-                self.data_trace = self.LaserSumhelper #?Hoda: adding all pulses in all sweeps togeather?
+                self.data_trace = self.LaserSumhelper # adding all pulses in all sweeps togeather
                 self.analog_input2.StopTask()
                 self.analog_input2.ClearTask()
                 if self.numberofsweeps < 30000 and self.meas_run:  # NI card number of Sweeps
@@ -471,9 +465,9 @@ class NIFastCounter(Base, SlowCounterInterface, FastCounterInterface):
                     self.start_measure()
             except:
                 if np.size(a) == 1:
-                    print('Increase the acq time')
+                    self.log.info('Increase the acq time')
                 else:
-                    print('Not able to measure, check sync')
+                    self.log.info('Not able to measure, check sync')
 
 
 
@@ -501,8 +495,7 @@ class NIFastCounter(Base, SlowCounterInterface, FastCounterInterface):
                                          None)  # PFI7
 
         if not self.meas_run:
-            print('measurement is done2')
-        # self.sigReadoutNI.emit() # loop
+            self.log.info('measurement is done2')
 
         if self.useNIcardDI == 1:
 
@@ -510,7 +503,6 @@ class NIFastCounter(Base, SlowCounterInterface, FastCounterInterface):
             Laser = self.count_data2[0, :]
             a = np.argwhere(Sync > 0.5)
             try:
-                LaserSum = np.zeros(1) #Hoda: Akhe Chera? :))
                 ArraySize = np.max(np.diff(np.transpose(a), 1))
                 LaserSum = np.zeros(ArraySize + 1)
                 for i in range(np.size(a) - 1):
@@ -570,5 +562,5 @@ class NIFastCounter(Base, SlowCounterInterface, FastCounterInterface):
                     self.numberofsweeps = 1
                     self.mycounter = 1
                 except:
-                    print('measurement is not stopped')
+                    self.log.info('measurement is not stopped')
                 return

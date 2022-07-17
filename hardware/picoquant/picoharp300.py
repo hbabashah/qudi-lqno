@@ -470,7 +470,7 @@ class PicoHarp300(Base, SlowCounterInterface, FastCounterInterface):
                            'value of {1} was passed.'.format(self.HISTCHAN, stopcount))
             return
 
-		return self.check(self._dll.PH_SetStopOverflow(self._deviceID, stop_ovfl, stopcount))
+        return self.check(self._dll.PH_SetStopOverflow(self._deviceID, stop_ovfl, stopcount))
 
     def set_binning(self, binning):
 
@@ -557,7 +557,7 @@ class PicoHarp300(Base, SlowCounterInterface, FastCounterInterface):
                            'ms, but a value of {2} has been passed.'
                            ''.format(self.ACQTMIN, self.ACQTMAX, acq_time))
         else:
-		print(e)
+            print(e)
 
     def stop_device(self):
         """ Stop the measurement."""
@@ -600,7 +600,6 @@ class PicoHarp300(Base, SlowCounterInterface, FastCounterInterface):
         return chcount
 
     def get_resolution(self):
-
         """ Retrieve the current resolution of the picohard.
 
         @return double: resolution at current binning.
@@ -608,11 +607,10 @@ class PicoHarp300(Base, SlowCounterInterface, FastCounterInterface):
 
         resolution = ctypes.c_double()
 
-		self.check(self._dll.PH_GetResolution(self._deviceID, ctypes.byref(resolution)))
-		return resolution.value
+        self.check(self._dll.PH_GetResolution(self._deviceID, ctypes.byref(resolution)))
+        return resolution.value
 
     def get_count_rate(self, channel):
-
         """ Get the current count rate for the
 
         @param int channel: which input channel to read (0 or 1):
@@ -661,8 +659,8 @@ class PicoHarp300(Base, SlowCounterInterface, FastCounterInterface):
         """
         elapsed = ctypes.c_double()
 
-		self.check(self._dll.PH_GetElapsedMeasTime(self._deviceID, ctypes.byref(elapsed)))
-		return elapsed.value
+        self.check(self._dll.PH_GetElapsedMeasTime(self._deviceID, ctypes.byref(elapsed)))
+        return elapsed.value
 
     def get_warnings(self):
         """Retrieve any warnings about the device or the current measurement.
@@ -674,8 +672,8 @@ class PicoHarp300(Base, SlowCounterInterface, FastCounterInterface):
         """
         warnings = ctypes.c_int32()
 
-		self.check(self._dll.PH_GetWarnings(self._deviceID, ctypes.byref(warnings)))
-		return warnings.value
+        self.check(self._dll.PH_GetWarnings(self._deviceID, ctypes.byref(warnings)))
+        return warnings.value
 
     def get_warnings_text(self, warning_num):
         """Retrieve the warningtext for the corresponding warning bitmask.
@@ -686,7 +684,7 @@ class PicoHarp300(Base, SlowCounterInterface, FastCounterInterface):
 
         """
         text = ctypes.create_string_buffer(32568)  # buffer at least 16284 byte
-		self.check(self._dll.PH_GetWarningsText(self._deviceID, warning_num, text))
+        self.check(self._dll.PH_GetWarningsText(self._deviceID, warning_num, text))
         return text.value
 
     def get_hardware_debug_info(self):
@@ -696,8 +694,8 @@ class PicoHarp300(Base, SlowCounterInterface, FastCounterInterface):
         """
         debuginfo = ctypes.create_string_buffer(32568) # buffer at least 16284 byte
 
-		self.check(self._dll.PH_GetHardwareDebugInfo(self._deviceID, debuginfo))
-		return debuginfo.value
+        self.check(self._dll.PH_GetHardwareDebugInfo(self._deviceID, debuginfo))
+        return debuginfo.value
 
     # =========================================================================
     #  Special functions for Time-Tagged Time Resolved mode
@@ -767,17 +765,17 @@ class PicoHarp300(Base, SlowCounterInterface, FastCounterInterface):
         three markers. Default after Initialize is all rising, i.e. set to 1.
         """
 
-		if ((me0 != 0) or (me0 != 1)) or ((me1 != 0) or (me1 != 1)) or \
+        if ((me0 != 0) or (me0 != 1)) or ((me1 != 0) or (me1 != 1)) or \
 		   ((me2 != 0) or (me2 != 1)) or ((me3 != 0) or (me3 != 1)):
 
-			self.log.error('PicoHarp: Could not set marker enable.\n'
+            self.log.error('PicoHarp: Could not set marker enable.\n'
 					   'All the marker options must be either 0 or 1, but '
 					   'the current marker settings were passed:\n'
 						'me0={0}, me1={1}, '
 						'me2={2}, me3={3},'.format(me0, me1, me2, me3))
-			return
-		else:
-			self.check(self._dll.PH_SetMarkerEnable(self._deviceID, me0,
+            return
+        else:
+            self.check(self._dll.PH_SetMarkerEnable(self._deviceID, me0,
          me1, me2, me3))
 
     def tttr_set_marker_holdofftime(self, holfofftime):
@@ -1061,7 +1059,7 @@ class PicoHarp300(Base, SlowCounterInterface, FastCounterInterface):
         number_of_gates: Number of gates in the pulse sequence. Ignore for
                          ungated counter.
         """
-		self.startSweep = 0
+        self.startSweep = 0
         self.mycounter = 1
         self.numberofsweeps = 1
         self.Hmode = 0
@@ -1187,18 +1185,18 @@ class PicoHarp300(Base, SlowCounterInterface, FastCounterInterface):
             returnarray[gate_index, timebin_index]
         """
         
-		self.LaserSumhelper[0:np.size(LaserSum)] = LaserSum + self.LaserSumhelper[0:np.size(
+        self.LaserSumhelper[0:np.size(LaserSum)] = LaserSum + self.LaserSumhelper[0:np.size(
 			LaserSum)]  # self.LaserSumhelper[0:np.size(LaserSum)]=LaserSum+self.LaserSumhelper[0:np.size(LaserSum)]
-		self.data_trace = self.LaserSumhelper
-		if self.numberofsweeps < 300000 and self.meas_run:  # NI card number of Sweeps
-			self.numberofsweeps = self.numberofsweeps + 1
-			self.start_measure()
+        self.data_trace = self.LaserSumhelper
+        if self.numberofsweeps < 300000 and self.meas_run:  # NI card number of Sweeps
+            self.numberofsweeps = self.numberofsweeps + 1
+            self.start_measure()
 
-		except:
-			if np.size(a) == 1:
-				print('Increase the acq time')
-			else:
-				print('Not able to measure, check sync')
+        except:
+            if np.size(a) == 1:
+                print('Increase the acq time')
+            else:
+                print('Not able to measure, check sync')
         info_dict = {'elapsed_sweeps': self.numberofsweeps,
                      'elapsed_time': None}  # TODO : implement that according to hardware capabilities
         return self.data_trace, info_dict
@@ -1208,16 +1206,12 @@ class PicoHarp300(Base, SlowCounterInterface, FastCounterInterface):
     # =========================================================================
 
     def start_measure(self):
-
-        #time.sleep(1)
         """
         Starts the fast counter.
         """
         # self.lock()
 
         self.meas_run = True  # to start the measurement u need to pass this serting
-
-
         self.start(int(
             self._record_length_ns / 1e6))  # Measurement time in millisec (unit ms) it is acq time which should be between 1 to... ms
         self.sigReadoutPicoharp.emit()
@@ -1341,80 +1335,80 @@ class PicoHarp300(Base, SlowCounterInterface, FastCounterInterface):
         """
 
         
-		if (actual_counts):
-			if self.get_flags() & 0x0003 > 0:
-				self.log.warning('FiFo Overrun!!!!!')
-				self.startsaving = 1
-			else:
-				self.startsaving = self._get_status()
-			if self.Hmode == 1:
-				self.outputfile.write((ctypes.c_uint * actual_counts)(*arr_data[0:actual_counts]))
-			else:
-				self.data_trace_helper20 = np.append(self.data_trace_helper20, arr_data[0:actual_counts])
-		else:
-			if self.startsaving:
-				self.startsaving = 0
-				ofltime = 0
-				finishTag = 0
-				finishtime0 = 0
-				startflag = 0
-				Myresolution = 4
-				finishtime = 0
-				timetag0 = 0
-				if self.Hmode == 1:
-					self.data_trace_helper20 = np.zeros((1000))  # new data
-				Mydata = np.zeros(np.size(self.data_trace_helper20), dtype=np.int64)
-				kkk = 0
-				Endmarker = 0
-				WRAPAROUND = 210698240
-				for entry in self.data_trace_helper20:
-					marker_ch = entry >> 28 & (15)  # including Overflow
-					T2time = entry & (268435455)
-					time_tag = T2time + ofltime
-					if marker_ch == 0 or marker_ch == 1 or marker_ch == 2 or marker_ch == 3 or marker_ch == 4:
-						if marker_ch == 0:
-							if startflag == 1:
-								finishTag = 1  # finish
-								Endmarker = kkk
-								if finishtime0:
-									finishtime = max(finishtime0, time_tag * Myresolution - timetag0)
-								finishtime0 = time_tag * Myresolution - timetag0
-							else:
-								startflag = 1  # start #this will make u sure that the first time finishtag=1 is not hapening
-							timetag0 = time_tag * Myresolution  # syncronization
-						if startflag == 1 and marker_ch == 1:
+        if (actual_counts):
+            if self.get_flags() & 0x0003 > 0:
+                self.log.warning('FiFo Overrun!!!!!')
+                self.startsaving = 1
+            else:
+                self.startsaving = self._get_status()
+            if self.Hmode == 1:
+                self.outputfile.write((ctypes.c_uint * actual_counts)(*arr_data[0:actual_counts]))
+            else:
+                self.data_trace_helper20 = np.append(self.data_trace_helper20, arr_data[0:actual_counts])
+        else:
+            if self.startsaving:
+                self.startsaving = 0
+                ofltime = 0
+                finishTag = 0
+                finishtime0 = 0
+                startflag = 0
+                Myresolution = 4
+                finishtime = 0
+                timetag0 = 0
+                if self.Hmode == 1:
+                    self.data_trace_helper20 = np.zeros((1000))  # new data
+                Mydata = np.zeros(np.size(self.data_trace_helper20), dtype=np.int64)
+                kkk = 0
+                Endmarker = 0
+                WRAPAROUND = 210698240
+                for entry in self.data_trace_helper20:
+                    marker_ch = entry >> 28 & (15)  # including Overflow
+                    T2time = entry & (268435455)
+                    time_tag = T2time + ofltime
+                    if marker_ch == 0 or marker_ch == 1 or marker_ch == 2 or marker_ch == 3 or marker_ch == 4:
+                        if marker_ch == 0:
+                            if startflag == 1:
+                                finishTag = 1  # finish
+                                Endmarker = kkk
+                                if finishtime0:
+                                    finishtime = max(finishtime0, time_tag * Myresolution - timetag0)
+                                finishtime0 = time_tag * Myresolution - timetag0
+                            else:
+                                startflag = 1  # start #this will make u sure that the first time finishtag=1 is not hapening
+                            timetag0 = time_tag * Myresolution  # syncronization
+                        if startflag == 1 and marker_ch == 1:
 
-							MytimeTag = time_tag * Myresolution
-							Mydata[kkk] = MytimeTag - timetag0
-							kkk = kkk + 1
-						if finishTag == 1:
-							finishTag = 0
-							# self.data_trace=self.data_trace2+self.data_trace
-					else:
-						if marker_ch == 15:
-							markers = entry & 15
+                            MytimeTag = time_tag * Myresolution
+                            Mydata[kkk] = MytimeTag - timetag0
+                            kkk = kkk + 1
+                        if finishTag == 1:
+                            finishTag = 0
+                        # self.data_trace=self.data_trace2+self.data_trace
+                    else:
+                        if marker_ch == 15:
+                            markers = entry & 15
 
-							if markers == 0:
-								ofltime = ofltime + WRAPAROUND
+                            if markers == 0:
+                                ofltime = ofltime + WRAPAROUND
 
-				if Endmarker:
-					self.data_trace_helper = self.data_trace_helper + \
-											 np.histogram(Mydata[0:Endmarker], self.mybins)[0]
+                if Endmarker:
+                    self.data_trace_helper = self.data_trace_helper + \
+                                             np.histogram(Mydata[0:Endmarker], self.mybins)[0]
 
-					if finishtime:
+                    if finishtime:
 
-						self.data_trace = self.data_trace_helper[
-										  0:5 + round(float(finishtime) / (self._bin_width_ns * 1e3))]
-				else:
-					self.log.warning('Endmarker Could not be calculated try to increase the record time')
+                        self.data_trace = self.data_trace_helper[
+                                          0:5 + round(float(finishtime) / (self._bin_width_ns * 1e3))]
+                else:
+                    self.log.warning('Endmarker Could not be calculated try to increase the record time')
 
-				self.startSweep = 1
-				self.data_trace_helper20 = np.array([], dtype=np.int64)
-		if self.startSweep == 1:
-			self.startSweep = 0
-			if self.numberofsweeps < 50000 and self.meas_run:
-				self.numberofsweeps = self.numberofsweeps + 1
-				self.start_measure()
+                self.startSweep = 1
+                self.data_trace_helper20 = np.array([], dtype=np.int64)
+        if self.startSweep == 1:
+            self.startSweep = 0
+            if self.numberofsweeps < 50000 and self.meas_run:
+                self.numberofsweeps = self.numberofsweeps + 1
+                self.start_measure()
 
 
 

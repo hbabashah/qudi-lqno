@@ -99,40 +99,47 @@ class Confocallogiccomplex(GenericLogic):
         self._piezo.mcl_close()
 
     def start_data_acquisition(self):
-		""" 
+        """
 		H.Babashah - create the thread for data acqusuitb. 
 		"""
         startThread = Thread(target=self.start_data_acquisition_thread)
         startThread.start()
 
     def start_data_acquisition_thread(self):
-		""" 
+        """
 		H.Babashah - The task that are required to be processed in a thread 
 		"""
         with self.threadlock:
-            # if self.module_state() == 'locked':
+            # FIXME: if self.module_state() == 'locked':
             #     self.log.error('Can not start Confocal scan. Logic is already locked.')
             #     return -1
-            # self.module_state.lock()
+            #  self.module_state.lock()
+            # Set sweep voltage range for xy scan
             V_XvalueRange = np.linspace(self.xmin, self.xmax, int(self.xnpts))
             V_YvalueRange = np.linspace(self.ymin, self.ymax, int(self.ynpts))
-
+            # Fitting exp
             def exponenial_func(x, a, b, c):
                 return a * (np.exp(-b * x))
             self.ChannelNumber = 1  # ACQ Chan Number
-
+            # Initialize xy map
             Image_xy = np.zeros((int(np.size(V_XvalueRange)), int(np.size(V_YvalueRange))))
             Image_xy_arb = np.zeros((int(np.size(V_XvalueRange)), int(np.size(V_YvalueRange))))
-
-            flag = True
+            # Set meanderline scan flag
+            flag_meander = True
+            # Set acq card integration time
             self._nicard.set_timing(self.int_time)
+            # Set MW CW frequency
             self._mw_device.set_fcw(self.fcw)
             self.Laser_length = 100e-6
             self.Laser_length_s = int(np.ceil(self.Laser_length * self._nicard.get_timing()))
-
+            # Set sweep type
+            # Fixme sweep time should be selected in the gui
             var_sweep_type = 'linear'
+            # Avoid zero input to pulse generator
             if self.time_start==0:
                 self.time_start=10e-9
+            # Fixme put it in the gui
+            # Set sweep type for pulse measurement
             if var_sweep_type == 'log':
                 var_range = np.logspace(np.log10(self.time_start), np.log10(self.time_stop), self.npts,
                                         base=10)
@@ -146,11 +153,13 @@ class Confocallogiccomplex(GenericLogic):
                 if self.stop_acq == True:
                     break
                 for V_Yvalue in V_YvalueRange:
-                    if flag == False:
+                    if flag_meander == False:
                         j = j - 1
                     t0 = time.time()
+                    # Set piezo position
                     self._piezo.gox(V_Xvalue)
                     self._piezo.goz(V_Yvalue)
+                    # Determine measurement type
                     if self.mes_type=='Contrast':
                         time.sleep(1e-3)
                         self._mw_device.set_status('OFF')
@@ -164,16 +173,16 @@ class Confocallogiccomplex(GenericLogic):
                     self.SigConfocalDataUpdated.emit(Image_xy) 
                     Image_xy_arb[i, j] = np.mean(DATA[self.ChannelNumber])
                     if self.mes_type=='Contrast' or self.mes_type == 'Contrast_fmax':
-                        self._mw_device.set_fcw(self.fcw) #for contrast fmax
+                        self._mw_device.set_fcw(self.fcw) # For contrast fmax
                         self._mw_device.set_status('ON')
                         self.SigDataUpdated.emit(np.array(DATA[0]), np.array(DATA[self.ChannelNumber]))
-                        time.sleep(1e-3)  # make sure sgn is on
+                        time.sleep(1e-3)  # Make sure sgn is on
                         DATA2 = self._nicard.read_data()
                         Image_xy_arb[i, j] = 1- np.mean(DATA2[self.ChannelNumber])/Image_xy[i, j]
 
-                    print(self.mes_type)
+
                     if self.mes_type == 'T1' or self.mes_type == 'Rabi' or self.mes_type == 'Ramsey' or self.mes_type == 'Hahn_echo':
-                        print('start pulse measurement')
+                        self.log.info('start pulse measurement')
                         if self.mes_type == 'Rabi' or self.mes_type == 'Ramsey' or self.mes_type == 'Hahn_echo':
                             self._mw_device.set_status('ON')
                             time.sleep(1e-3)
@@ -196,7 +205,7 @@ class Confocallogiccomplex(GenericLogic):
 
                             ###  Data   Analysis
 
-                            maxindPulseAmp = np.argmax(PulseAmp)# set min as zero
+                            maxindPulseAmp = np.argmax(PulseAmp)# Set min as zero
                             maxPulseAmpAvg = abs(np.mean(PulseAmp[int(maxindPulseAmp):int(maxindPulseAmp + 100)]))
                             PulseAmp = [kar / abs(maxPulseAmpAvg) for kar in PulseAmp]
 
@@ -217,7 +226,7 @@ class Confocallogiccomplex(GenericLogic):
                             self.SigDataUpdated.emit(var_range[0:ii], np.array(VARResult))
 
 
-						# create a fit
+                        # Create a fit
                         if self.mes_type=='T1':
                             popt, pcov = curve_fit(exponenial_func, var_range, VARResult, p0=(.01, 1e-3, 1), maxfev=10000)
 
@@ -227,19 +236,18 @@ class Confocallogiccomplex(GenericLogic):
                             Image_xy_arb[i, j] = np.array(np.mean(VARResult))
                     if self.mes_type == 'PL':
                         self.SigDataUpdated.emit(np.array(DATA[0]), np.array(DATA[self.ChannelNumber]))
-                        time.sleep(1e-3)  # make sure sgn is on
-                    self.SigConfocalArbDataUpdated.emit(Image_xy_arb)  # np.random.rand(5, 5)
-                    if flag == True:
+                        time.sleep(1e-3)  # Make sure sgn is on
+                    self.SigConfocalArbDataUpdated.emit(Image_xy_arb)
+                    if flag_meander == True:
                         j = j + 1
                     if self.stop_acq == True:
                         break
 
                     t4 = time.time()
                     posread = self._piezo.get_position()
-                    #print(t1-t0, t2-t1, t3-t2, t4-t3)
 
                 V_YvalueRange = np.flip(V_YvalueRange)
-                flag = not_(flag)
+                flag_meander = not_(flag_meander)
             self._mw_device.set_status('OFF')
             self.SigToggleAction.emit()
 
@@ -247,7 +255,7 @@ class Confocallogiccomplex(GenericLogic):
 
 
     def set_cordinate_sparam(self,xmin,xmax,xnpts,ymin,ymax,ynpts):
-		""" 
+        """
 		H.Babashah - set the position of the piezo
 		"""
         self.xmin = xmin*1e6
@@ -258,15 +266,18 @@ class Confocallogiccomplex(GenericLogic):
         self.ynpts = ynpts
 
     def set_move_to_position(self, xpos, ypos,zpos):
-		""" 
+        """
 		H.Babashah - move the piezo
+		@param float xpos: x position in m
+		@param float xpos: x position in m
+		@param float xpos: x position in m
 		"""
         self.xpos = xpos*1e6
         self.ypos = ypos*1e6
         self.zpos = zpos*1e6
 
     def move_to_position(self):
-		""" 
+        """
 		H.Babashah - position for simultaneous signal acqusition
 		"""
         self._piezo.gox(self.xpos)
@@ -278,8 +289,9 @@ class Confocallogiccomplex(GenericLogic):
         self.SigDataUpdated.emit(np.array(DATA[0]), np.array(DATA[self.ChannelNumber]))
 
     def set_fcw(self, fcw):
-		""" 
+        """
 		H.Babashah -Set the microwave frequency
+		@param float fcw: microwave cw frequency
 		"""
         self.fcw = fcw
         self._mw_device.set_fcw(self.fcw)
@@ -287,29 +299,29 @@ class Confocallogiccomplex(GenericLogic):
 
 
     def stop_data_acquisition(self,state):
-		""" 
+        """
 		H.Babashah -stop acquiring data from any DAQ
 		"""
-        #Fix me mutex threadlock might be required to add
+        #Fixme mutex threadlock might be required to add
 
         self.stop_acq = True
 
 
     def set_pcw(self, pcw):
-		""" 
+        """
 		H.Babashah -set microwave power
 		"""
         self._mw_device.set_pcw(pcw)
         self.pcw = pcw
     def set_ODMR(self, stime,npts):
-		""" 
+        """
 		H.Babashah -set and intialize the ODMR measurement
 		"""
         self.stime = stime
         self.npts = npts
 
     def set_sweep_param(self, fmin,fmax,fstep):
-		""" 
+        """
 		H.Babashah -set sweep parameters of microwave for ODMR measurement
 		"""
         self._mw_device.set_sweep_param(fmin,fmax,fstep)
@@ -317,14 +329,14 @@ class Confocallogiccomplex(GenericLogic):
         self.fmax = fmax
         self.fstep = fstep
     def set_scope_param(self,int_time,navg):
-		""" 
+        """
 		H.Babashah -set integration time and number of averages
 		"""
         self.int_time = int_time
         self.navg = navg
 
     def set_mes_type(self, mes_type):
-		""" 
+        """
 		H.Babashah -Defin the type of confocal measurement
 		input is string as follows:
 		T1
@@ -333,9 +345,9 @@ class Confocallogiccomplex(GenericLogic):
 		ODMR
 		"""
         self.mes_type=mes_type
-        print(mes_type)
+        self.log.info(mes_type)
     def ThresholdL(self,data,t_v):
-		""" 
+        """
 		H.Babashah -Threshold the lower value of data and t_v 
 		return the threshold value in time t_ind
 		"""
@@ -345,11 +357,11 @@ class Confocallogiccomplex(GenericLogic):
                 t_ind = kop
                 break
         if t_ind==0:
-            print('Probably could not find the begining of the pulse, zero set as begining')
+            self.log.info('Probably could not find the begining of the pulse, zero set as begining')
         return t_ind
 
     def ThresholdR(self,data,t_v):
-		""" 
+        """
 		H.Babashah -Threshold the higher value of data and t_v 
 		return the threshold value in time t_ind
 		"""
@@ -359,15 +371,15 @@ class Confocallogiccomplex(GenericLogic):
                 t_ind = -kop-1
                 break
         if t_ind==-1:
-            print('Probably could not find the begining of the pulse, zero set as begining')
+            self.log.info('Probably could not find the begining of the pulse, zero set as begining')
         return t_ind
     def set_navg(self, navg):
-		""" 
+        """
 		H.Babashah -set number of avg for confocal measurement
 		"""
         self.navg = navg
     def set_pulse(self, time_start,time_stop,npts,rabi_period):
-		""" 
+        """
 		H.Babashah - set the pulse parameters 
 		"""
         self.time_start = time_start
@@ -375,7 +387,7 @@ class Confocallogiccomplex(GenericLogic):
         self.npts = npts
         self.rabi_period=rabi_period
     def set_pulse_analysi_param(self, threshold,time_reference,time_signal,time_reference_start,time_signal_start):
-		""" 
+        """
 		H.Babashah - set the pulse analysis parameters 
 		"""
         self.threshold = threshold

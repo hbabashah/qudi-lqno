@@ -72,7 +72,9 @@ class SRS_lockin(Base, LockinInterface, HardInterface):
             self.cmd.read_termination = '\n'
 
     def on_deactivate(self):
-
+        """
+        deactive the module
+        """
         self.cmd.close()
 
     def get_hard_type(self):
@@ -82,6 +84,11 @@ class SRS_lockin(Base, LockinInterface, HardInterface):
         return hard_type
 
     def set_ramp_parameter(self, text, value):
+        """
+        set ramp sweep parameters
+        @param string: ramp type selection frequency/amplitude
+        @param value: frequency/amlitude of the ramp
+        """
         if text == 'amplitude':
             self.set_amplitude(value)
         elif text == 'frequency':
@@ -121,9 +128,17 @@ class SRS_lockin(Base, LockinInterface, HardInterface):
 
 
     def set_amplitude(self, value):
+        """
+        Set the input amplitude sensitivity
+        @param float value: input sensitivity voltage
+        """
         self.cmd.write('SLVL '+str(value))
 
     def set_frequency(self, value):
+        """
+        Set frequency modulation value
+        @param float value: modulation frequency in Hz
+        """
         self.cmd.write('FREQ '+str(value))
 		
 		

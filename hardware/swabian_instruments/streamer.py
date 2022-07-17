@@ -142,6 +142,13 @@ class Streamer(Base, dummy_interface):
         self.pulser.setTrigger(start=self.start, rearm=self.rearm)
 
     def set_pulse_measurement(self,Laser_length, Variable,pulsetype,rabi_period):
+        """ Set pulse measurement parameters
+        :param float Laser_length: Length of Laser in s
+        :param float Variable: Length of changing varibale
+        :param string pulsetype: Type of pulse measurement
+        :param float rabi_period: Rabi period in s
+        :return:
+        """
         wl = Laser_length  # LaserPulseWidth in second
 
         LaserCh = int(self._Laser_channel)
@@ -151,7 +158,7 @@ class Streamer(Base, dummy_interface):
         HIGH = 1
         LOW = 0
         NumberOfrepeats = 3000
-
+        # Set pulse measurement type
         if pulsetype == 'T1':
             LaserChseq = [(wl * 1e9, HIGH), (Variable * 1e9, LOW)] * NumberOfrepeats  # 0
             OscopeTirgChseq = [(wl * 1e9, HIGH), (Variable * 1e9, LOW)] * NumberOfrepeats  # 0

@@ -13,7 +13,7 @@ from qtpy import uic
 
 class PULSE_MainWindow(QtWidgets.QMainWindow):
     """
-    H.Babashah - class for using dummy_gui
+    H.Babashah - Create the main window based on pulse ui file
     """
     def __init__(self):
         # Get the path to the *.ui file
@@ -28,7 +28,8 @@ class PULSE_MainWindow(QtWidgets.QMainWindow):
 
 class PULSEGUI(GUIBase):
     """
-    H.Babashah - This is the GUI Class for Dummy graphical interface. Easy written to learn.
+    H.Babashah - This is the GUI Class for pulse measurement using scope or non triggered measurement and generation instruments.
+
     """
 
     # declare connectors
@@ -52,7 +53,7 @@ class PULSEGUI(GUIBase):
 
     def on_activate(self):
         """
-        F.Beato & H.Babashah - Definition, configuration and initialisation of the FFT GUI.
+        Definition, configuration and initialisation of the GUI.
 
         This init connects all the graphic modules, which were created in the
         *.ui file and configures the event handling between the modules.
@@ -60,7 +61,7 @@ class PULSEGUI(GUIBase):
 
         self._pulselogic = self.pulselogic()
 
-        # Use the inherited class 'Ui_ODMRGuiUI' to create now the GUI element:
+        # Use the inherited class 'ui' to create now the GUI element:
         self._mw = PULSE_MainWindow()
 
         # Define data plots
@@ -127,13 +128,13 @@ class PULSEGUI(GUIBase):
 
         self._pulselogic.SigDataPulseUpdated.connect(self.update_plot_pulse, QtCore.Qt.QueuedConnection)
 
-        # Show the Main FFT GUI:
+        # Show the Main GUI:
         self.show()
 
 
     def on_deactivate(self):
         """
-        H.Babashah & F. Baeto - Reverse steps of activation and also close the main window and do whatever when a module is closed using closed btn in task manager
+        Reverse steps of activation and also close the main window and do whatever when a module is closed using closed btn in task manager
 
         @return int: error code (0:OK, -1:error)
         """
@@ -160,7 +161,7 @@ class PULSEGUI(GUIBase):
 
     def start_data_acquisition(self):
         """
-        H.Babashah - Send user order to start acquisition to the logic.
+        Send user order to start acquisition to the logic.
         """
         #self._mw.actionStart.setEnabled(False)
         #self._mw.actionStop.setEnabled(True)
@@ -170,31 +171,43 @@ class PULSEGUI(GUIBase):
 
     def stop_data_acquisition(self):
         """
-        H.Babashah - stop the confocal scan and get the data
+        stop the confocal scan and get the data
         """
 
         self.SigStopAcquisition.emit(True)
     def Toggle_actionstart(self):
+        """
+        toggle between strat and stop buttons.
+        """
         self._mw.actionStart.setEnabled(True)
     def change_pcw(self):
-
-
+        """
+        Change microwave CW power in Hz
+        """
         pcw = self._mw.pcw_doubleSpinBox.value()
         self.SigPcwChanged.emit(pcw)
     def change_navg(self):
-
+        """
+        Change number of averages
+        """
 
         navg = self._mw.navg_doubleSpinBox.value()
         self.SigNavgChanged.emit(navg)
 
     def set_pulse(self):
+        """
+        set the pulse generator paramters
+        """
         time_start = self._mw.time_start_doubleSpinBox.value()
         time_stop = self._mw.time_stop_doubleSpinBox.value()
+        # number of points
         npts = self._mw.npts_doubleSpinBox.value()
         rabi_period = self._mw.rabi_period_doubleSpinBox.value()
         self.SigSetPulseChanged.emit(time_start,time_stop,npts,rabi_period)
     def change_pulse_analysis_param(self):
-
+        """
+        change pulse analysis paramters
+        """
 
         threshold = self._mw.threshold_doubleSpinBox.value()
         time_reference = self._mw.time_reference_doubleSpinBox.value()
@@ -205,27 +218,31 @@ class PULSEGUI(GUIBase):
         self.SigPulseAnalysisChanged.emit(threshold,time_reference,time_signal,time_reference_start,time_signal_start)
     def update_plot(self, xdata, ydata):
         """
-        H.Babashah - Updates the plot for measurement result
+        Updates the plot for measurement result
+        @param array xdata: time axis data in s
+        @param array ydata: pulse measurement result in a.u.
         """
 
         self.pulse_exp_image.setData(xdata, ydata)
     def update_plot_pulse(self, xdata, ydata):
         """
-         H.Babashah - Updates the plot for pulse result
+        Updates the plot for pulse result
+        @param array xdata: time axis data in s
+        @param array ydata: single averaged pulse amplitude.
         """
 
         self.pulse_exp_image_pulse.setData(xdata, ydata)
 
     def change_fcw(self):
         """
-         H.Babashah - Change the microwave frequency
+        Change the microwave frequency
         """
 
         fcw = self._mw.fcw_doubleSpinBox.value()
         self.SigFcwChanged.emit(fcw)
     def show(self):
         """
-        H.Babashah - Taken from Qudi - Make window visible and put it above all other windows.
+        Taken from Qudi - Make window visible and put it above all other windows.
         """
         self._mw.show()
         self._mw.activateWindow()

@@ -13,7 +13,7 @@ from qtpy import uic
 
 class CWODMR_MainWindow(QtWidgets.QMainWindow):
     """
-    H.Babashah - class for using dummy_gui
+    H.Babashah - create the main window based on cwodmr ui file
     """
     def __init__(self):
         # Get the path to the *.ui file
@@ -28,7 +28,7 @@ class CWODMR_MainWindow(QtWidgets.QMainWindow):
 
 class CWODMRGUI(GUIBase):
     """
-    H.Babashah - This is the GUI Class for Dummy graphical interface. Easy written to learn.
+    H.Babashah - CW ODMR GUI class to sweep microwave frequency and show the PL using non trigger hardwares
     """
 
     # declare connectors
@@ -49,7 +49,7 @@ class CWODMRGUI(GUIBase):
 
     def on_activate(self):
         """
-         Definition, configuration and initialisation of the FFT GUI.
+         Definition, configuration and initialisation of the GUI.
 
         This init connects all the graphic modules, which were created in the
         *.ui file and configures the event handling between the modules.
@@ -57,7 +57,7 @@ class CWODMRGUI(GUIBase):
 
         self._cwodmrlogic = self.cwodmrlogic()
 
-        # Use the inherited class 'Ui_ODMRGuiUI' to create now the GUI element:
+        # Use the inherited class 'ui' to create now the GUI element:
         self._mw = CWODMR_MainWindow()
 
         # Define data plots
@@ -105,7 +105,7 @@ class CWODMRGUI(GUIBase):
 
 
 
-        # Show the Main FFT GUI:
+        # Show the Main CWODMR GUI:
         self.show()
 
 
@@ -139,7 +139,7 @@ class CWODMRGUI(GUIBase):
         self._cwodmrlogic.stop_acq=False
         self.SigStartAcquisition.emit()
     def Toggle_actionstart(self):
-		"""
+        """
         H.Babashah - toggle between strat and stop buttons.
         """
         self._mw.actionStart.setEnabled(True)
@@ -162,22 +162,23 @@ class CWODMRGUI(GUIBase):
         """
         H.Babashah - update ODMR parameters
         """
-
+        # sert step time for the sweep
         stime = self._mw.stime_doubleSpinBox.value()
         self.SigSetODMRChanged.emit(stime)
     def change_scope_param(self):
         """
         H.Babashah - scope parameters
         """
-
+        # number of averages
         navg = self._mw.navg_doubleSpinBox.value()
+        #number of points
         npts = self._mw.npts_doubleSpinBox.value()
         self.SigScopeParamChanged.emit(navg,npts)
     def change_sweep_param(self):
         """
         H.Babashah - update microwave frequency sweep parameters
         """
-
+        # frequency sweep paramters in Hz
         fmin = self._mw.fmin_doubleSpinBox.value()
         fmax = self._mw.fmax_doubleSpinBox.value()
         fstep = self._mw.fstep_doubleSpinBox.value()
@@ -186,6 +187,8 @@ class CWODMRGUI(GUIBase):
     def update_plot(self, xdata, ydata):
         """
         H.Babashah - Updates the plot.
+        @param array xdata: frequency axis of the ODMR plot
+        @param array ydata: PL axis of the ODMR plot
         """
 
         self.dummy_image.setData(xdata, ydata)

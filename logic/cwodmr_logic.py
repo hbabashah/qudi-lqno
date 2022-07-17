@@ -63,16 +63,16 @@ class CWODMRlogic(GenericLogic):
         """
         # Disconnect signals
         self.sigDataUpdated.disconnect()
-		self.SigToggleAction.disconnect()
+        self.SigToggleAction.disconnect()
     def start_data_acquisition(self):
-		"""
+        """
         Trigger start data aqusition
         """
         startThread = Thread(target=self.start_data_acquisition_thread)
         startThread.start()
 
     def start_data_acquisition_thread(self):
-		"""
+        """
         Perform data aquisition in thread
 		
         """
@@ -122,7 +122,7 @@ class CWODMRlogic(GenericLogic):
 
             self.SigToggleAction.emit()
     def stop_data_acquisition(self,state):
-		"""
+        """
         Trigger start data aqusition
 		@param bool state : state of the measurement True continue False pause
         """
@@ -132,20 +132,20 @@ class CWODMRlogic(GenericLogic):
         #     return -1
         self.stop_acq = True
     def set_pcw(self, pcw):
-		"""
+        """
         set microwave CW power
 		@param float pcw : microwave power in dBm
         """
         self._mw_device.set_pcw(pcw)
         self.pcw = pcw
     def set_ODMR(self, stime):
-		"""
+        """
         set ODMR sweep step time
-		@param float stime : step time in seconds
+		@param float stime : frequency step time in seconds
         """
         self.stime = stime
     def set_scope_param(self,navg,npts):
-		"""
+        """
         set oscope parameters
 		@param int navg : number of averages of scope
 		@param int npts : number of sampling points
@@ -155,7 +155,7 @@ class CWODMRlogic(GenericLogic):
 
 
     def set_sweep_param(self, fmin,fmax,fstep):
-		"""
+        """
         set ODMR microwave sweep parameters
 		@param int fmin : microwave minimum frequency in Hz
 		@param int fmax : microwave maximumu frequency in Hz

@@ -32,7 +32,7 @@ from interface.dummy_interface import dummy_interface
 
 class MicrowaveSMF100a(Base, dummy_interface):
     """
-    H.Babashah
+    H.Babashah- Hardware class for R&S microwave generator SMF100a
 
     """
 

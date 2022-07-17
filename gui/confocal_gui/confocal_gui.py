@@ -16,7 +16,7 @@ from qtpy import uic
 
 class Confocal_MainWindow(QtWidgets.QMainWindow):
     """
-    H.Babashah - class for using dummy_gui
+    H.Babashah - create the main window based on confocal ui file
     """
     def __init__(self):
         # Get the path to the *.ui file
@@ -31,7 +31,7 @@ class Confocal_MainWindow(QtWidgets.QMainWindow):
 
 class ConfocalGUI(GUIBase):
     """
-    H.Babashah - This is the GUI Class for confocal scan
+    H.Babashah - Confocal class for xy scan using non triggered acquisition and assignment equipments
     """
 
     # declare connectors
@@ -54,7 +54,7 @@ class ConfocalGUI(GUIBase):
 
     def on_activate(self):
         """
-        Definition, configuration and initialisation of the FFT GUI.
+        Definition, configuration and initialisation of the  GUI.
 
         This init connects all the graphic modules, which were created in the
         *.ui file and configures the event handling between the modules.
@@ -62,7 +62,7 @@ class ConfocalGUI(GUIBase):
 
         self._confocallogic = self.confocallogic()
 
-        # Use the inherited class 'Ui_ODMRGuiUI' to create now the GUI element:
+        # Use the inherited class 'ui' to create now the GUI element:
         self._mw = Confocal_MainWindow()
 
         # Define data plots
@@ -153,7 +153,7 @@ class ConfocalGUI(GUIBase):
         self._confocallogic.SigToggleAction.connect(self.Toggle_actionstart, QtCore.Qt.QueuedConnection)
 
 
-        # Show the Main FFT GUI:
+        # Show the Main GUI:
         self.show()
 
 
@@ -209,7 +209,7 @@ class ConfocalGUI(GUIBase):
 
         self.SigStopAcquisition.emit(True)
     def Toggle_actionstart(self):
-		"""
+        """
         H.Babashah - toggle between strat and stop buttons.
         """
         self._mw.actionStart.setEnabled(True)
@@ -242,7 +242,7 @@ class ConfocalGUI(GUIBase):
         """
         update microwave frequency sweep parameters
         """
-
+        # get frequency sweeps from the spin box in Hz
         fmin = self._mw.fmin_doubleSpinBox.value()
         fmax = self._mw.fmax_doubleSpinBox.value()
         fstep = self._mw.fstep_doubleSpinBox.value()
@@ -252,9 +252,9 @@ class ConfocalGUI(GUIBase):
 
     def change_cordinate_sparam(self):
         """
-         set coridnate sweep of piezo 
+        set coridnate sweep of piezo
         """
-
+        # get position sweep parameters in m
         xmin = self._mw.xmin_doubleSpinBox.value()
         xmax = self._mw.xmax_doubleSpinBox.value()
         xnpts = self._mw.xnpts_doubleSpinBox.value()
@@ -267,22 +267,28 @@ class ConfocalGUI(GUIBase):
         """
          change coridnate of piezo to xpos and ypos
         """
-
+        # get position paramaters in m
         xpos = self._mw.xpos_doubleSpinBox.value()
         ypos = self._mw.ypos_doubleSpinBox.value()
         self._confocallogic.set_move_to_position(xpos,ypos)
     def update_plot(self, xdata, ydata):
         """
         Updates the plot.
+        @param array xdata: update x aixs of the plot shown in gui
+        @param array ydata: update y aixs of the plot shown in gui
         """
         self.dummy_image.setData(xdata, ydata)
     def update_confocal_plot(self, xy_image_data):
         """
         Updates the plot.
+        @param array xy_image_data: NxM array each element represent the PL measurement
         """
+        # contour level
         minval = np.min(xy_image_data[np.nonzero(xy_image_data)])
         maxval = np.max(xy_image_data[np.nonzero(xy_image_data)])
+        # send image
         self.xy_image.setImage(image=xy_image_data,levels=(minval, maxval))
+        # create and set the colobar
         self.xy_cb.refresh_colorbar(minval, maxval)
         xMin=self._confocallogic.xmin
         xMax=self._confocallogic.xmax
@@ -294,9 +300,9 @@ class ConfocalGUI(GUIBase):
         xy_viewbox = self.xy_image.getViewBox()
 
         xy_viewbox.setLimits(xMin=xMin - (xMax - xMin) * self.image_x_padding,
-                                 xMax=xMax + (xMax - xMin) * self.image_x_padding,
-                                 yMin=yMin - (yMax - yMin) * self.image_y_padding,
-                                 yMax=yMax + (yMax - yMin) * self.image_y_padding)
+                             xMax=xMax + (xMax - xMin) * self.image_x_padding,
+                             yMin=yMin - (yMax - yMin) * self.image_y_padding,
+                             yMax=yMax + (yMax - yMin) * self.image_y_padding)
         self.xy_resolution=300
         px_size = ((xMax - xMin) / (self.xy_resolution - 1),
                    (yMax - yMin) / (self.xy_resolution - 1))

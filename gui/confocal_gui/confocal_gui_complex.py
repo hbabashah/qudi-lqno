@@ -16,7 +16,7 @@ from qtpy import uic
 
 class Confocal_MainWindow(QtWidgets.QMainWindow):
     """
-    H.Babashah - class for using dummy_gui
+    H.Babashah - create the main window based on confocal complex ui file
     """
     def __init__(self):
         # Get the path to the *.ui file
@@ -31,7 +31,7 @@ class Confocal_MainWindow(QtWidgets.QMainWindow):
 
 class ConfocalComplexGUI(GUIBase):
     """
-    H.Babashah - This is the GUI Class for confocal scan
+    H.Babashah - Confocal complex class for xy scan and report desired measurement for triggered and non triggered hardwares
     """
 
     # declare connectors
@@ -58,7 +58,7 @@ class ConfocalComplexGUI(GUIBase):
 
     def on_activate(self):
         """
-        H.Babashah - Definition, configuration and initialisation of the FFT GUI.
+        H.Babashah - Definition, configuration and initialisation of the GUI.
 
         This init connects all the graphic modules, which were created in the
         *.ui file and configures the event handling between the modules.
@@ -67,12 +67,14 @@ class ConfocalComplexGUI(GUIBase):
         self._confocallogic = self.confocallogic()
 
 
-        # Use the inherited class 'Ui_ODMRGuiUI' to create now the GUI element:
+        # Use the inherited class 'ui' to create now the GUI element:
         self._mw = Confocal_MainWindow()
 
         # Define data plots
         self.dummy_image = pg.PlotDataItem()
-        # Add the display item to the xy and xz ViewWidget, which was defined in the UI file.
+        # Add the display item to the xy and xz ViewWidget, which was defined in the
+        #
+        # file.
         self._mw.dummy_graph.addItem(self.dummy_image)
         self._mw.dummy_graph.setLabel(axis='left', text='Amplitude', units='V')
         self._mw.dummy_graph.setLabel(axis='bottom', text='Time', units='s')
@@ -201,7 +203,7 @@ class ConfocalComplexGUI(GUIBase):
         self._confocallogic.SigToggleAction.connect(self.Toggle_actionstart, QtCore.Qt.QueuedConnection)
 
 
-        # Show the Main FFT GUI:
+        # Show the Main confocal GUI:
         self.show()
 
 
@@ -257,7 +259,7 @@ class ConfocalComplexGUI(GUIBase):
 
         self.SigStopAcquisition.emit(True)
     def Toggle_actionstart(self):
-		"""
+        """
         H.Babashah - toggle between strat and stop buttons.
         """
         self._mw.actionStart.setEnabled(True)
@@ -290,7 +292,7 @@ class ConfocalComplexGUI(GUIBase):
         """
         H.Babashah - update microwave frequency sweep parameters
         """
-
+        # get frequency in Hz
         fmin = self._mw.fmin_doubleSpinBox.value()
         fmax = self._mw.fmax_doubleSpinBox.value()
         fstep = self._mw.fstep_doubleSpinBox.value()
@@ -302,7 +304,7 @@ class ConfocalComplexGUI(GUIBase):
         """
          set coridnate sweep of piezo 
         """
-
+        # sweep cordinates min and max in m
         xmin = self._mw.xmin_doubleSpinBox.value()
         xmax = self._mw.xmax_doubleSpinBox.value()
         xnpts = self._mw.xnpts_doubleSpinBox.value()
@@ -324,18 +326,22 @@ class ConfocalComplexGUI(GUIBase):
     def update_plot(self, xdata, ydata):
         """
         H.Babashah - Updates the plot.
+        @param array xdata: data shown in x axis of the graph
+        @param array ydata: data shown in y axis of the graph
         """
         self.dummy_image.setData(xdata, ydata)
     def update_confocal_plot(self, xy_image_data):
         """
-        H. Babashah - Updates the plot.
+        H. Babashah - Updates the image of concfocal measurment
+        @param array xy_image_data: NxM array each element represent the measurement result
         #Fixme Pcolor map instead of having imagexy
         """
+        # contour level
         minval = np.min(xy_image_data[np.nonzero(xy_image_data)])
         maxval = np.max(xy_image_data[np.nonzero(xy_image_data)])
+        # send image
         self.xy_image.setImage(image=xy_image_data,levels=(minval, maxval))
-        print(minval)
-        print(maxval)
+        # create and set the colobar
         self.xy_cb.refresh_colorbar(minval*1e3, maxval*1e3)
         xMin=self._confocallogic.xmin
         xMax=self._confocallogic.xmax
@@ -347,9 +353,9 @@ class ConfocalComplexGUI(GUIBase):
         xy_viewbox = self.xy_image.getViewBox()
 
         xy_viewbox.setLimits(xMin=xMin - (xMax - xMin) * self.image_x_padding,
-                                 xMax=xMax + (xMax - xMin) * self.image_x_padding,
-                                 yMin=yMin - (yMax - yMin) * self.image_y_padding,
-                                 yMax=yMax + (yMax - yMin) * self.image_y_padding)
+                             xMax=xMax + (xMax - xMin) * self.image_x_padding,
+                             yMin=yMin - (yMax - yMin) * self.image_y_padding,
+                             yMax=yMax + (yMax - yMin) * self.image_y_padding)
         self.xy_resolution=300
         px_size = ((xMax - xMin) / (self.xy_resolution - 1),
                    (yMax - yMin) / (self.xy_resolution - 1))
@@ -362,11 +368,15 @@ class ConfocalComplexGUI(GUIBase):
         xy_viewbox.updateViewRange()
     def update_confocal_arb_plot(self, xy_image_arb_data):
         """
-        H. Babashah - Updates the plot.
+        H. Babashah - Updates the plot of confocal for arbitrary measurement type
+        @param array xy_image_arb_data: NxM array each element represent the arbitrary measurement result
         """
+        # contour level
         minval = np.min(xy_image_arb_data[np.nonzero(xy_image_arb_data)])
         maxval = np.max(xy_image_arb_data[np.nonzero(xy_image_arb_data)])
+        # send image
         self.xy_image_arb.setImage(image=xy_image_arb_data,levels=(minval, maxval))
+        # create and set the colobar
         self.xy_cb_arb.refresh_colorbar(minval*1e3, maxval*1e3)
         xMin=self._confocallogic.xmin
         xMax=self._confocallogic.xmax
@@ -378,14 +388,14 @@ class ConfocalComplexGUI(GUIBase):
         xy_viewbox = self.xy_image_arb.getViewBox()
 
         xy_viewbox.setLimits(xMin=xMin - (xMax - xMin) * self.image_x_padding,
-                                 xMax=xMax + (xMax - xMin) * self.image_x_padding,
-                                 yMin=yMin - (yMax - yMin) * self.image_y_padding,
-                                 yMax=yMax + (yMax - yMin) * self.image_y_padding)
+                             xMax=xMax + (xMax - xMin) * self.image_x_padding,
+                             yMin=yMin - (yMax - yMin) * self.image_y_padding,
+                             yMax=yMax + (yMax - yMin) * self.image_y_padding)
         self.xy_resolution=300
         px_size = ((xMax - xMin) / (self.xy_resolution - 1),
                    (yMax - yMin) / (self.xy_resolution - 1))
         self.xy_image_arb.set_image_extent(((xMin - px_size[0] / 2, xMax + px_size[0] / 2),
-                                        (yMin - px_size[1] / 2, yMax + px_size[1] / 2)))
+                                            (yMin - px_size[1] / 2, yMax + px_size[1] / 2)))
 
         # self.put_cursor_in_xy_scan()
 
@@ -395,14 +405,19 @@ class ConfocalComplexGUI(GUIBase):
         """
         H. Babashah- Change the scope parameters
         """
-
+        # integration time in s
         int_time = self._mw.int_time_doubleSpinBox.value()
+        # number of averages
         navg = self._mw.navg_doubleSpinBox.value()
         self.SigScopeParamChanged.emit(int_time,navg)
 
     def set_pulse(self):
+        """
+        H. Babashah- set pulse generator parameters
+        """
         time_start = self._mw.time_start_doubleSpinBox.value()
         time_stop = self._mw.time_stop_doubleSpinBox.value()
+        # number of points
         npts = self._mw.npts_doubleSpinBox.value()
         rabi_period = self._mw.rabi_period_doubleSpinBox.value()
         self.SigSetPulseChanged.emit(time_start,time_stop,npts,rabi_period)
@@ -424,7 +439,7 @@ class ConfocalComplexGUI(GUIBase):
 
     def change_pulse_analysis_param(self):
         """
-        H.Babashah - change  pulse analy sis param
+        H.Babashah - change  pulse analysis parametrs
         """
 
         threshold = self._mw.threshold_doubleSpinBox.value()

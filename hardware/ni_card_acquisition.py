@@ -54,7 +54,7 @@ class NICard_Acquisition(Base, dummy_interface):
 
 
     def on_deactivate(self):
-		"""
+        """
         Deinitialisation performed during deactivation of the module.
         """
         daq.DAQmxStopTask(self._ai_task)
@@ -77,7 +77,7 @@ class NICard_Acquisition(Base, dummy_interface):
 
         self.data = np.ndarray((self.nb_chan+1, self.nb_samps_per_chan))
     def get_timing(self):
-	    """ 
+        """
 		H.Babashah - return the sampling frequency of DAQ 
 		"""
         return self._sampling_frequency
@@ -126,13 +126,13 @@ class NICard_Acquisition(Base, dummy_interface):
         pass #daq.DAQmxStartTask(self._ai_task)
 
     def stop_acquisition(self):
-		""" 
+        """
 		H.Babashah - stop aquiring  the data from ni card task. 
 		"""
         daq.DAQmxStopTask(self._ai_task)
 
     def read_data(self):
-		"""
+        """
 		H.Babashah - read the data from ni card task. 
 		"""
 	
@@ -140,7 +140,7 @@ class NICard_Acquisition(Base, dummy_interface):
         t0 = time.time()
         daq.ReadAnalogF64(self._ai_task, self.nb_samps_per_chan, 150, daq.DAQmx_Val_GroupByChannel, self.raw_data, self._buffer_size, ctypes.byref(self.read), None)
         t1 = time.time()
-        print(t1-t0)
+        self.log.info(t1-t0)
         self.data[0] = time_data
         for i in range(self.nb_chan):
             self.data[i+1] = np.split(self.raw_data, self.nb_chan)[i]

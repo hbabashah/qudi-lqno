@@ -15,7 +15,9 @@ from core.statusvariable import StatusVar
 from threading import *
 
 class Confocallogic(GenericLogic):
-
+    """
+    This is the logic class for confocal for non triggerable hardwares (e.g. oscilloscope)
+    """
     # Connectors
     scope = Connector(interface='dummy_interface')
     mw_source = Connector(interface='dummy_interface')
@@ -44,14 +46,14 @@ class Confocallogic(GenericLogic):
     # Update signals
     SigDataUpdated = QtCore.Signal(np.ndarray, np.ndarray)
     SigConfocalDataUpdated= QtCore.Signal(np.ndarray)
+    # Internal signals
     SigToggleAction= QtCore.Signal()
     def __init__(self, config, **kwargs):
         super().__init__(config=config, **kwargs)
         self.threadlock = Mutex()
 
     def on_activate(self):
-        """
-        initilize module once activated.
+        """ Initilize module once activated.
         """
         # Get connectors
         self._mw_device = self.mw_source()
@@ -69,48 +71,50 @@ class Confocallogic(GenericLogic):
         self.data_spectrum = np.array([])
 
     def on_deactivate(self):
-        """
-        Deinitialisation performed during deactivation of the module.
+        """ Deinitialisation performed during deactivation of the module.
         """
         # Disconnect signals
         self.sigDataUpdated.disconnect()
-		self.SigConfocalDataUpdated.disconnect()
-		SigToggleAction.disconnect()
+        self.SigConfocalDataUpdated.disconnect()
+        SigToggleAction.disconnect()
     def start_data_acquisition(self):
-		""" 
-		trigger measurement start
-		
-        """	
+        """ Trigger measurement start thread
+
+        """
         startThread = Thread(target=self.start_data_acquisition_thread)
         startThread.start()
 
     def start_data_acquisition_thread(self):
-		""" 
-		start data aqusition through a thread.
+        """
+		Start data aqusition through a thread with lock
 		
         """	
-		#Fix me add the channel number in config file
+        #Fixme add the channel number in config file
 	
         with self.threadlock:
+            # voltage range of the xy scan
             V_XvalueRange = np.linspace(self.xmin, self.xmax, int(self.xnpts))
             V_YvalueRange = np.linspace(self.ymin, self.ymax, int(self.ynpts))
-
+            # Set scope timebin
             self._scope.set_Center_Tscale(1, self.int_time / 1.25)  # 1.25*10
             self._scope.set_trigger_sweep(0)  # set normal mode for ACQ of Oscope
             self._scope.set_trigger_level(1)
+            # Pulser channel number
             self.ChannelNumber = 1  # ACQ Chan Number
             ChannelTrigNumber = 2  # ACQ_chan trigger
             self._scope.set_trigger_source(ChannelTrigNumber)
             self._pulser.set_confocal(0, 0)  # intialize the confocal
             self._pulser.start_stream()  # start stream
             self._scope.set_timeout()
+            # Set scope vertical scale
             self._scope.set_init_scale(1)
             self._scope.set_scope_range(1, 3)
             self._scope.set_Voffset(1, 1.5, 1)
-            
+            # Initialize contour image xy
             Image_xy = np.zeros((int(np.size(V_XvalueRange)), int(np.size(V_YvalueRange))))
+            # Set flag to do meanderline scan
             flag_meanderline = True
-			i = -1;
+            i = -1;
             for V_Xvalue in V_XvalueRange:
                 i = i + 1
                 j = 0
@@ -119,12 +123,16 @@ class Confocallogic(GenericLogic):
                 for V_Yvalue in V_YvalueRange:
                     if flag_meanderline == False:
                         j = j - 1
+                    # Pulser setting and start
                     self._pulser.set_confocal(V_Xvalue, V_Yvalue)
 
                     self._pulser.start_stream()
+                    # Assigning data
                     DATA = self._scope.get_data([self.ChannelNumber])  #
                     Image_xy[i, j] = np.mean(DATA[self.ChannelNumber])
+                    # Emit the xy signal to confocal gui
                     self.SigConfocalDataUpdated.emit(Image_xy)  # np.random.rand(5, 5)
+                    # Emit amplitude and time data to plotter in gui
                     self.SigDataUpdated.emit(np.array(DATA[0]), np.array(DATA[self.ChannelNumber]))
                     if flag_meanderline == True:
                         j = j + 1
@@ -137,7 +145,7 @@ class Confocallogic(GenericLogic):
 
 
     def set_cordinate_sparam(self,xmin,xmax,xnpts,ymin,ymax,ynpts):
-		""" set the confocla cordinate sweep.
+        """ set the confocla cordinate sweep.
 		
         @param: float xmin : the value of minimum x position in m
 
@@ -159,7 +167,7 @@ class Confocallogic(GenericLogic):
         self.ynpts = ynpts
 
     def set_move_to_position(self, xpos, ypos):
-		""" update the piezo to move to a position
+        """ update the piezo to move to a position
 		
         @param: float xpos : the value of  x position
 
@@ -171,7 +179,7 @@ class Confocallogic(GenericLogic):
 
 
     def move_to_position(self):
-		""" applying the voltage to the piezo
+        """ Applying the voltage to the piezo
 		
         """
         self._pulser.set_confocal(self.xpos, self.ypos) # using an awg to apply a voltage
@@ -186,7 +194,7 @@ class Confocallogic(GenericLogic):
         self.SigDataUpdated.emit(np.array(DATA[0]), np.array(DATA[self.ChannelNumber]))
 
     def set_fcw(self, fcw):
-		""" set the microwave source cw frequency 
+        """ Set the microwave source cw frequency
 		
         @param: float fcw : the value of frequency in Hz
 
@@ -196,12 +204,12 @@ class Confocallogic(GenericLogic):
 
 
     def stop_data_acquisition(self,state):
-		""" update the stop measurement flag 
+        """ Update the stop measurement flag
 		
         @stat: bool state : the bool value of stae True stop False start
 
         """
-        #Fix me mutex threadlock might be required to add
+        #Fixme mutex threadlock might be required to add
         # if self.module_state() == 'locked':
         #     self.module_state.unlock()
         #     return -1
@@ -209,7 +217,7 @@ class Confocallogic(GenericLogic):
 
 
     def set_pcw(self, pcw):
-		""" set the microwave source cw power 
+        """ Set the microwave source cw power
 		
         @param: float pcw : the value of power in dBm
 
@@ -217,7 +225,7 @@ class Confocallogic(GenericLogic):
         self._mw_device.set_pcw(pcw)
         self.pcw = pcw
     def set_ODMR(self, stime,npts):
-		""" set the ODMR sweep parameters 
+        """ Set the ODMR sweep parameters
 		
         @param: float stime : the sweep step time in seconds
 		@param: int npts : number of points in seconds
@@ -228,7 +236,7 @@ class Confocallogic(GenericLogic):
         self.npts = npts
 
     def set_sweep_param(self, fmin,fmax,fstep):
-		""" set the microwave sweep parameters for ODMR 
+        """ Set the microwave sweep parameters for ODMR
 		
         @param: float fmin : microwave minimum frequency in Hz
 		@param: float fmin : microwave maximum frequency in Hz
@@ -240,7 +248,7 @@ class Confocallogic(GenericLogic):
         self.fmax = fmax
         self.fstep = fstep
     def set_scope_param(self,int_time,navg):
-		""" set the microwave sweep parameters for ODMR 
+        """ Set the microwave sweep parameters for ODMR
 		
         @param: float int_time : integration time of signal in seconds
 		@param: int navg : number of averages
