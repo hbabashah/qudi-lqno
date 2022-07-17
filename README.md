@@ -1,11 +1,11 @@
 # qudi LQNO
 
-This is the qudi LQNO based on ulm-qudi platform. It is mostly focused to perform ultrafast pulsed experiment using national instrument card. In addition to Qudi-ulm it consist the following features. 
+This is the qudi LQNO based on ulm-qudi platform. It is mostly focused to perform ultrafast pulsed experiment using national instrument card. In addition to Qudi-ulm it consists the following features. 
 
-## Features
+## Added Features
 
   * Photodetector acquisition with oscilloscope
-  * Faster and analog and digital DAQ acquisition
+  * Faster analog and digital DAQ acquisition
   * Analog acquisition with DAQ for pulsed measurements
   * Digital acquisition with DAQ for pulsed measurements
   * Photon counting with DAQ
@@ -29,3 +29,10 @@ As a good scientific practice the two papers should be cited [Optically detected
 ## License
 
 The licence related to the Qudi is GPLv3 and everything about their licence can be found in their main repository as qudi-ulm.
+
+## Installation
+Use the yml file corresponding to your operating system inside the tools folder to install the dependencies. You can do it as follows when you are inside the folder:
+
+```
+conda env create -f conda-env-OS-xxbit.yml
+```
