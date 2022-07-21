@@ -2,6 +2,7 @@ atomicwrites==1.4.1
 attrs==21.4.0
 certifi==2022.6.15
 colorama==0.4.5
+fysom==2.1.6
 importlib-metadata==4.12.0
 iniconfig==1.1.1
 numpy==1.21.6
@@ -10,7 +11,11 @@ pip==21.2.4
 pluggy==1.0.0
 py==1.11.0
 pyparsing==3.0.9
+PyQt5==5.15.7
+PyQt5-Qt5==5.15.2
+PyQt5-sip==12.11.0
 pytest==7.1.2
+QtPy==2.1.0
 setuptools==61.2.0
 tomli==2.0.1
 typing_extensions==4.3.0
