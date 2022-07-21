@@ -2,22 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8f894279-1db8-43c6-9461-b66c22bf2d07" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/confocal_gui/confocal_gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/confocal_gui/confocal_gui.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/confocal_gui/confocal_gui_complex.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/confocal_gui/confocal_gui_complex.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/cwodmr_gui/cwodmr_gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/cwodmr_gui/cwodmr_gui.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/pulse_gui/pulse_gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/pulse_gui/pulse_gui.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hardware/NIfastcounter.py" beforeDir="false" afterPath="$PROJECT_DIR$/hardware/NIfastcounter.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hardware/SR830_Lock-in.py" beforeDir="false" afterPath="$PROJECT_DIR$/hardware/SR830_Lock-in.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hardware/microwave/mw_smf100a.py" beforeDir="false" afterPath="$PROJECT_DIR$/hardware/microwave/mw_smf100a.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hardware/ni_card_acquisition.py" beforeDir="false" afterPath="$PROJECT_DIR$/hardware/ni_card_acquisition.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hardware/picoquant/picoharp300.py" beforeDir="false" afterPath="$PROJECT_DIR$/hardware/picoquant/picoharp300.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hardware/swabian_instruments/streamer.py" beforeDir="false" afterPath="$PROJECT_DIR$/hardware/swabian_instruments/streamer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logic/confocal_acq_logic.py" beforeDir="false" afterPath="$PROJECT_DIR$/logic/confocal_acq_logic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logic/confocal_logic_complex.py" beforeDir="false" afterPath="$PROJECT_DIR$/logic/confocal_logic_complex.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logic/cwodmr_logic.py" beforeDir="false" afterPath="$PROJECT_DIR$/logic/cwodmr_logic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logic/pulse_logic.py" beforeDir="false" afterPath="$PROJECT_DIR$/logic/pulse_logic.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -27,18 +12,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/logic/pulse_logic.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="220">
-              <caret line="16" column="8" selection-start-line="16" selection-start-column="8" selection-end-line="16" selection-end-column="8" />
-              <folding>
-                <element signature="e#0#23#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/hardware/piezo/madcity_piezo.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -53,8 +26,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/hardware/SR830_Lock-in.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="955">
-              <caret line="79" column="28" lean-forward="true" selection-start-line="79" selection-start-column="28" selection-end-line="79" selection-end-column="28" />
+            <state relative-caret-position="1088">
+              <caret line="79" column="28" selection-start-line="79" selection-start-column="28" selection-end-line="79" selection-end-column="28" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
               </folding>
@@ -63,13 +36,28 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/hardware/swabian_instruments/streamer.py">
+        <entry file="file://$PROJECT_DIR$/requirements.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="629">
-              <caret line="37" column="99" lean-forward="true" selection-start-line="37" selection-start-column="99" selection-end-line="37" selection-end-column="99" />
-              <folding>
-                <element signature="e#0#13#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="192">
+              <caret line="78" column="4" selection-start-line="78" selection-start-column="4" selection-end-line="78" selection-end-column="4" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tools/conda-env-win7-64bit-qt5.yml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="323">
+              <caret line="19" column="20" selection-start-line="19" selection-start-column="20" selection-end-line="19" selection-end-column="20" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/.github/workflows/python-app.yml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="306">
+              <caret line="18" column="29" selection-start-line="18" selection-start-column="29" selection-end-line="18" selection-end-column="29" />
             </state>
           </provider>
         </entry>
@@ -84,9 +72,19 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+            <state split_layout="SPLIT">
+              <first_editor />
+              <second_editor />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/hardware/picoquant/picoharp300.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17275">
+            <state relative-caret-position="20502">
               <caret line="1220" column="36" selection-start-line="1220" selection-start-column="35" selection-end-line="1220" selection-end-column="36" />
               <folding>
                 <element signature="e#858#871#0" expanded="true" />
@@ -98,13 +96,18 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/logic/confocal_logic.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="366">
+            <state relative-caret-position="7429">
               <caret line="449" column="20" selection-start-line="449" selection-start-column="12" selection-end-line="449" selection-end-column="20" />
               <folding>
                 <element signature="e#817#840#0" expanded="true" />
               </folding>
             </state>
           </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tools/conda-env-win10-64bit-qt5.yml">
+          <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
     </leaf>
@@ -156,6 +159,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -166,53 +170,18 @@
             <path>
               <item name="qudi-lqno" type="b2602c69:ProjectViewProjectNode" />
               <item name="qudi-lqno" type="462c0819:PsiDirectoryNode" />
-              <item name="gui" type="462c0819:PsiDirectoryNode" />
+              <item name=".github" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="qudi-lqno" type="b2602c69:ProjectViewProjectNode" />
               <item name="qudi-lqno" type="462c0819:PsiDirectoryNode" />
-              <item name="hardware" type="462c0819:PsiDirectoryNode" />
+              <item name=".github" type="462c0819:PsiDirectoryNode" />
+              <item name="workflows" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="qudi-lqno" type="b2602c69:ProjectViewProjectNode" />
               <item name="qudi-lqno" type="462c0819:PsiDirectoryNode" />
-              <item name="hardware" type="462c0819:PsiDirectoryNode" />
-              <item name="awg" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="qudi-lqno" type="b2602c69:ProjectViewProjectNode" />
-              <item name="qudi-lqno" type="462c0819:PsiDirectoryNode" />
-              <item name="hardware" type="462c0819:PsiDirectoryNode" />
-              <item name="camera" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="qudi-lqno" type="b2602c69:ProjectViewProjectNode" />
-              <item name="qudi-lqno" type="462c0819:PsiDirectoryNode" />
-              <item name="hardware" type="462c0819:PsiDirectoryNode" />
-              <item name="microwave" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="qudi-lqno" type="b2602c69:ProjectViewProjectNode" />
-              <item name="qudi-lqno" type="462c0819:PsiDirectoryNode" />
-              <item name="hardware" type="462c0819:PsiDirectoryNode" />
-              <item name="picoquant" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="qudi-lqno" type="b2602c69:ProjectViewProjectNode" />
-              <item name="qudi-lqno" type="462c0819:PsiDirectoryNode" />
-              <item name="hardware" type="462c0819:PsiDirectoryNode" />
-              <item name="piezo" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="qudi-lqno" type="b2602c69:ProjectViewProjectNode" />
-              <item name="qudi-lqno" type="462c0819:PsiDirectoryNode" />
-              <item name="hardware" type="462c0819:PsiDirectoryNode" />
-              <item name="swabian_instruments" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="qudi-lqno" type="b2602c69:ProjectViewProjectNode" />
-              <item name="qudi-lqno" type="462c0819:PsiDirectoryNode" />
-              <item name="logic" type="462c0819:PsiDirectoryNode" />
+              <item name=".pytest_cache" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="qudi-lqno" type="b2602c69:ProjectViewProjectNode" />
@@ -223,7 +192,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -266,10 +234,10 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-2568" y="-372" width="2576" height="1408" extended-state="6" />
+    <frame x="-2303" y="23" width="1294" height="703" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.11741529" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4944134" visible="true" weight="0.3598726" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -327,7 +295,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/logic/confocal_logic.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="366">
+        <state relative-caret-position="7429">
           <caret line="449" column="20" selection-start-line="449" selection-start-column="12" selection-end-line="449" selection-end-column="20" />
           <folding>
             <element signature="e#817#840#0" expanded="true" />
@@ -414,7 +382,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/hardware/picoquant/picoharp300.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17275">
+        <state relative-caret-position="20502">
           <caret line="1220" column="36" selection-start-line="1220" selection-start-column="35" selection-end-line="1220" selection-end-column="36" />
           <folding>
             <element signature="e#858#871#0" expanded="true" />
@@ -433,8 +401,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/hardware/SR830_Lock-in.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="955">
-          <caret line="79" column="28" lean-forward="true" selection-start-line="79" selection-start-column="28" selection-end-line="79" selection-end-column="28" />
+        <state relative-caret-position="1088">
+          <caret line="79" column="28" selection-start-line="79" selection-start-column="28" selection-end-line="79" selection-end-column="28" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
           </folding>
