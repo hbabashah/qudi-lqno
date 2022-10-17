@@ -41,6 +41,6 @@ conda env create -f conda-env-OS-xxbit.yml
 
 or you can either use requirement.txt file to install dependencies.
 
-'''
+```
 pip install requirements.txt
-'''
+```
