@@ -1,6 +1,6 @@
 # qudi LQNO
 
-This is the qudi LQNO based on ulm-qudi platform. It is mostly focused to perform ultrafast pulsed experiment using national instrument card. In addition to Qudi-ulm it consists the following features. 
+This is the qudi LQNO based on ulm-qudi platform. It is mostly focused to perform ultrafast pulsed experiment using national instrument card. In addition to Qudi-ulm it consists the following features. This version will be working with no erros. For technical information you can contact hossein babashah.
 
 ## Added Features
 
