@@ -12,7 +12,7 @@ env:
 #    - PIP_DEPENDENCIES="doxypypy fysom gitpython hdf5storage lmfit pydaqmx pyvisa pyvisa-py qtpy pyqtgraph rpyc ruamel.yaml smmap spidev i2cdev"
 
   matrix:
-    - PYTHON_VERSION=3.6 USE_QT_API=PyQt5 BUILD_DOCS=True
+    - PYTHON_VERSION=3.8 USE_QT_API=PyQt5 BUILD_DOCS=True
 
 addons:
   apt:
