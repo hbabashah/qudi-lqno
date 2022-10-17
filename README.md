@@ -31,8 +31,16 @@ As a good scientific practice the two papers should be cited [Optically detected
 The licence related to the Qudi is GPLv3 and everything about their licence can be found in their main repository as qudi-ulm.
 
 ## Installation
+Pycharm is used as the python IDE.
+
 Use the yml file corresponding to your operating system inside the tools folder to install the dependencies. You can do it as follows when you are inside the folder:
 
 ```
 conda env create -f conda-env-OS-xxbit.yml
 ```
+
+or you can either use requirement.txt file to install dependencies.
+
+'''
+pip install requirements.txt
+'''
